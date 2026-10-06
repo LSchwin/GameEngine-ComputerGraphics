@@ -1,0 +1,220 @@
+{
+  "actors": [
+    {
+      "name": "PlayerPrototype",
+      "type": "PlayerController",
+      "prototype": true,
+      "tag": "Player",
+      "active": true,
+      "speed": 40.0,
+      "transform": {
+        "position": [ 640.0, 512.0 ],
+        "rotation": 0.0,
+        "scale": 3.0
+      },
+      "components": [
+        {
+          "type": "SpriteAnimatorRendererComponent",
+          "default_animation": "idle",
+          "origin": [ 0.5, 0.6 ],
+          "animations": [
+            {
+              "name": "idle",
+              "texture_frames": "Animations/player_idle.json",
+              "frames_per_second": 2.0,
+              "loop": true
+            },
+            {
+              "name": "run",
+              "texture_frames": "Animations/player_run.json",
+              "frames_per_second": 12.0,
+              "loop": true
+            },
+            {
+              "name": "fall",
+              "texture_frames": "Animations/player_jump.json",
+              "frames_per_second": 12.0,
+              "loop": false
+            },
+            {
+              "name": "jump",
+              "texture_frames": "Animations/player_flip.json",
+              "frames_per_second": 12.0,
+              "loop": true
+            },
+            {
+              "name": "ground_attack1",
+              "texture_frames": "Animations/groundCombo1.json",
+              "frames_per_second": 12.0,
+              "loop": false
+            },
+            {
+              "name": "ground_attack2",
+              "texture_frames": "Animations/groundCombo2.json",
+              "frames_per_second": 12.0,
+              "loop": false
+            },
+            {
+              "name": "ground_attack3",
+              "texture_frames": "Animations/groundCombo3.json",
+              "frames_per_second": 12.0,
+              "loop": false
+            },
+            {
+              "name": "air_attack1",
+              "texture_frames": "Animations/airCombo1.json",
+              "frames_per_second": 12.0,
+              "loop": false
+            },
+            {
+              "name": "air_attack2",
+              "texture_frames": "Animations/airCombo2.json",
+              "frames_per_second": 12.0,
+              "loop": false
+            },
+            {
+              "name": "air_attack3",
+              "texture_frames": "Animations/airCombo3.json",
+              "frames_per_second": 12.0,
+              "loop": false
+            }
+          ]
+        },
+        {
+          "type": "Box2DPhysicsComponent",
+          "linear_damping": 2.0,
+          "angular_damping": 2.0,
+          "shape": "capsule",
+          "size": [ 36, 48 ],
+          "constrain_angle": true,
+          "restitution": 0.0,
+          "gravity_scale": 1.5
+        }
+      ]
+    },
+    {
+      "name": "EnemyPrototype",
+      "type": "EnemyController",
+      "prototype": true,
+      "tag": "Enemy",
+      "active": true,
+      "speed": 40.0,
+      "health": 25.0,
+      "transform": {
+        "position": [ 640.0, 512.0 ],
+        "rotation": 0.0,
+        "scale": 2.0
+      },
+      "components": [
+        {
+          "type": "SpriteAnimatorRendererComponent",
+          "default_animation": "idle",
+          "origin": [ 0.5, 0.6 ],
+          "animations": [
+            {
+              "name": "attack",
+              "texture_frames": "Animations/enemy_attack.json",
+              "frames_per_second": 12.0,
+              "loop": false
+            },
+            {
+              "name": "idle",
+              "texture_frames": "Animations/enemy_idle.json",
+              "frames_per_second": 12.0,
+              "loop": true
+            },
+            {
+              "name": "hit",
+              "texture_frames": "Animations/enemy_hit.json",
+              "frames_per_second": 12.0,
+              "loop": false
+            },
+            {
+              "name": "run",
+              "texture_frames": "Animations/enemy_run.json",
+              "frames_per_second": 12.0,
+              "loop": true
+            }
+          ]
+        },
+        {
+          "type": "Box2DPhysicsComponent",
+          "linear_damping": 2.0,
+          "angular_damping": 2.0,
+          "shape": "capsule",
+          "size": [ 36, 48 ],
+          "constrain_angle": true,
+          "gravity_scale": 1.0
+        }
+      ]
+    },
+    {
+      "name": "FlyingEnemyPrototype",
+      "type": "FlyingEnemyController",
+      "prototype": true,
+      "tag": "Enemy",
+      "active": true,
+      "speed": 15.0,
+      "transform": {
+        "position": [ 640.0, 512.0 ],
+        "rotation": 0.0,
+        "scale": 1.0
+      },
+      "components": [
+        {
+          "type": "SpriteAnimatorRendererComponent",
+          "default_animation": "idle",
+          "animations": [
+            {
+              "name": "idle",
+              "texture_frames": "Animations/coin_idle.json",
+              "frames_per_second": 12.0,
+              "loop": true
+            }
+          ]
+        },
+        {
+          "type": "Box2DPhysicsComponent",
+          "linear_damping": 2.0,
+          "angular_damping": 2.0,
+          "shape": "circle",
+          "size": [ 48, 48 ],
+          "constrain_angle": true,
+          "gravity_scale": 0.0,
+          "is_sensor": true
+        }
+      ]
+    },
+    {
+      "name": "DamagerPrototype",
+      "type": "Damager",
+      "prototype": true,
+      "tag": "Damage",
+      "active": true,
+      "lifespan": 0.1,
+      "damage": 1.0,
+      "transform": {
+        "position": [ 640.0, 512.0 ],
+        "rotation": 0.0,
+        "scale": 1.0
+      },
+      "components": [
+        {
+          "type": "SpriteRendererComponent",
+          "texture": "textures/damager.png",
+          "active": false
+        },
+        {
+          "type": "Box2DPhysicsComponent",
+          "linear_damping": 2.0,
+          "angular_damping": 2.0,
+          "shape": "circle",
+          "size": [ 48, 48 ],
+          "constrain_angle": true,
+          "gravity_scale": 0.0,
+          "is_sensor": true
+        }
+      ]
+    }
+  ]
+}

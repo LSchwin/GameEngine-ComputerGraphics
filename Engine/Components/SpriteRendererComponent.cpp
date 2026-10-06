@@ -1,0 +1,63 @@
+#include "pch.h"
+#include "SpriteRendererComponent.h"
+#include "Renderer/Renderer.h"
+#include "Resources/ResourceManager.h"
+#include "Framework/Actor.h"
+#include "Engine/Engine.h"
+
+namespace nu
+{
+	FACTORY_REGISTER(SpriteRendererComponent)
+
+	void SpriteRendererComponent::Start()
+	{
+		if (m_textureName.empty() == false)
+		{
+			m_texture = Resources().Get<Texture>(m_textureName, Engine::Get().GetRenderer());
+			if (m_texture)
+			{
+				m_size = m_texture->GetSize();
+			}
+		}
+	}
+
+	void SpriteRendererComponent::Draw(const Renderer& renderer)
+	{
+		if (m_texture)
+		{
+			if (m_sourceRect.w > 0 && m_sourceRect.h > 0)
+			{
+				renderer.DrawTexture(*m_texture,
+					m_sourceRect,
+					GetOwner()->GetTransform().position.x,
+					GetOwner()->GetTransform().position.y,
+					GetOwner()->GetTransform().rotation,
+					GetOwner()->GetTransform().scale,
+					m_flipH,
+					m_origin,
+					m_offset);
+			}
+			else
+			{
+				renderer.DrawTexture(*m_texture,
+					GetOwner()->GetTransform().position.x,
+					GetOwner()->GetTransform().position.y,
+					GetOwner()->GetTransform().rotation,
+					GetOwner()->GetTransform().scale,
+					m_flipH,
+					m_origin,
+					m_offset);
+			}
+		}
+	}
+
+	void SpriteRendererComponent::Read(const json::value_t& value)
+	{
+		RendererComponent::Read(value);
+
+		JSON_READ_NAME(value, "texture", m_textureName);
+		JSON_READ_NAME(value, "flipH", m_flipH);
+		JSON_READ_NAME(value, "origin", m_origin);
+		JSON_READ_NAME(value, "offset", m_offset);
+	}
+}

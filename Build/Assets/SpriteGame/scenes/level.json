@@ -1,0 +1,44 @@
+{
+  "actors": [
+    {
+      "type": "Actor",
+      "prototype": false,
+      "name": "Tilemap",
+      "tag": "Ground",
+      "active": true,
+      "persistent": false,
+      "transform": {
+        "position": [ 0.0, 0.0 ],
+        "rotation": 0.0,
+        "scale": 3.0
+      },
+      "components": [
+        {
+          "type": "TilemapRendererComponent",
+          "active": true,
+          "tilemap_name": "tilemaps/world.json"
+        }
+      ]
+    },
+    {
+      "type": "Actor",
+      "prototype": false,
+      "name": "Tilemap",
+      "tag": "Death",
+      "active": true,
+      "persistent": false,
+      "transform": {
+        "position": [ 0.0, 0.0 ],
+        "rotation": 0.0,
+        "scale": 3.0
+      },
+      "components": [
+        {
+          "type": "TilemapRendererComponent",
+          "active": false,
+          "tilemap_name": "tilemaps/world_death.json"
+        }
+      ]
+    }
+  ]
+}

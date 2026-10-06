@@ -1,0 +1,7 @@
+{
+  "texture_name": "textures/player_attack.png",
+  "columns": 8,
+  "rows": 2,
+  "start_frame": 10,
+  "total_frames": 5
+}

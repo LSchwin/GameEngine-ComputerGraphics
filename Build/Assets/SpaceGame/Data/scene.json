@@ -1,0 +1,170 @@
+{
+  "actors": [
+    {
+      "type": "Actor",
+      "prototype": false,
+      "name": "Coin",
+      "tag": "Enemy",
+      "active": true,
+      "persistent": true,
+      "transform": {
+        "position": [ 200.0, 200.0 ],
+        "rotation": 0.0,
+        "scale": 1.0
+      },
+      "components": [
+        {
+          "type": "SpriteAnimationRendererComponent",
+          "texture_frames": "Animations/coin_idle.json",
+          "frames_per_second": 12.0,
+          "loop": true
+        }
+      ]
+    },
+    {
+      "type": "Actor",
+      "prototype": false,
+      "name": "Tilemap",
+      "tag": "Ground",
+      "active": true,
+      "persistent": true,
+      "transform": {
+        "position": [ 0.0, 0.0 ],
+        "rotation": 0.0,
+        "scale": 3.0
+      },
+      "components": [
+        {
+          "type": "TilemapRendererComponent",
+          "tilemap_name": "tilemaps/world.json"
+        }
+      ]
+    },
+    {
+      "name": "PlayerPrototype",
+      "type": "Player",
+      "prototype": true,
+      "tag": "Player",
+      "active": true,
+      "speed": 40.0,
+      "ammo": 3,
+      "transform": {
+        "position": [ 640.0, 512.0 ],
+        "rotation": 0.0,
+        "scale": 0.2
+      },
+      "components": [
+        {
+          "type": "SpriteRendererComponent",
+          "texture": "textures/player.png"
+        },
+        {
+          "type": "Box2DPhysicsComponent",
+          "linear_damping": 2.0,
+          "angular_damping": 2.0,
+          "size": [ 48, 48 ],
+          "gravity_scale": 0.0
+        }
+      ]
+    },
+    {
+      "name": "EnemyPrototype",
+      "type": "Enemy",
+      "prototype": true,
+      "tag": "Enemy",
+      "active": true,
+      "speed": 2000.0,
+      "ammo": 3,
+      "transform": {
+        "position": [ 640.0, 512.0 ],
+        "rotation": 0.0,
+        "scale": 0.2
+      },
+      "components": [
+        {
+          "type": "SpriteRendererComponent",
+          "texture": "textures/enemy.png"
+        },
+        {
+          "type": "Box2DPhysicsComponent",
+          "linear_damping": 2.0,
+          "angular_damping": 2.0,
+          "size": [ 48, 48 ],
+          "gravity_scale": 0.0
+        }
+      ]
+    },
+    {
+      "name": "BulletPrototype",
+      "type": "Bullet",
+      "prototype": true,
+      "tag": "Bullet",
+      "active": true,
+      "speed": 40.0,
+      "damping": 0.0,
+      "lifespan": 2.0,
+      "transform": {
+        "position": [ 640.0, 512.0 ],
+        "rotation": 0.0,
+        "scale": 0.2
+      },
+      "components": [
+        {
+          "type": "SpriteRendererComponent",
+          "texture": "textures/bullet.png"
+        },
+        {
+          "type": "Box2DPhysicsComponent",
+          "linear_damping": 2.0,
+          "angular_damping": 2.0,
+          "size": [ 48, 48 ],
+          "gravity_scale": 0.0,
+          "is_sensor": true
+        }
+      ]
+    },
+    {
+      "name": "BombPrototype",
+      "type": "Bomb",
+      "prototype": true,
+      "tag": "Bomb",
+      "active": true,
+      "exploded": false,
+      "speed": 6000.0,
+      "damping": 0.0,
+      "lifespan": 2.0,
+      "transform": {
+        "position": [ 0.0, 0.0 ],
+        "rotation": 0.0,
+        "scale": 2.0
+      },
+      "components": [
+        {
+          "type": "SpriteRendererComponent",
+          "texture": "textures/bomb.png"
+        }
+      ]
+    },
+    {
+      "name": "AmmoPickupPrototype",
+      "type": "AmmoPickup",
+      "prototype": true,
+      "tag": "AmmoPickup",
+      "active": true,
+      "speed": 0.0,
+      "damping": 0.0,
+      "lifespan": 30.0,
+      "transform": {
+        "position": [ 640.0, 512.0 ],
+        "rotation": 0.0,
+        "scale": 1.0
+      },
+      "components": [
+        {
+          "type": "SpriteRendererComponent",
+          "texture": "textures/pickup.png"
+        }
+      ]
+    }
+  ]
+}
