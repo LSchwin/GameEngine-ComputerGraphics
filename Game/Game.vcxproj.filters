@@ -5,12 +5,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="SpaceGame">
-      <UniqueIdentifier>{ff3bc820-c131-46f8-9d3b-1dbe8d28aa07}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SpriteGame">
-      <UniqueIdentifier>{3f059cdd-b7fc-40c2-b24f-9f29e27e4c24}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Assets\SpaceGame">
       <UniqueIdentifier>{71fb4a1c-b2fc-43c8-b690-fae3ac1bacdd}</UniqueIdentifier>
     </Filter>
@@ -37,46 +31,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SpaceGame\AmmoPickup.cpp">
-      <Filter>SpaceGame</Filter>
-    </ClCompile>
-    <ClCompile Include="SpaceGame\Assets.cpp">
-      <Filter>SpaceGame</Filter>
-    </ClCompile>
-    <ClCompile Include="SpaceGame\Bomb.cpp">
-      <Filter>SpaceGame</Filter>
-    </ClCompile>
-    <ClCompile Include="SpaceGame\Bullet.cpp">
-      <Filter>SpaceGame</Filter>
-    </ClCompile>
-    <ClCompile Include="SpaceGame\Enemy.cpp">
-      <Filter>SpaceGame</Filter>
-    </ClCompile>
-    <ClCompile Include="SpaceGame\Player.cpp">
-      <Filter>SpaceGame</Filter>
-    </ClCompile>
-    <ClCompile Include="SpaceGame\SpaceGame.cpp">
-      <Filter>SpaceGame</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="SpriteGame\SpriteGame.cpp">
-      <Filter>SpriteGame</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteGame\PlayerController.cpp">
-      <Filter>SpriteGame</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteGame\EnemyController.cpp">
-      <Filter>SpriteGame</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteGame\FlyingEnemyController.cpp">
-      <Filter>SpriteGame</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteGame\CharacterBase.cpp">
-      <Filter>SpriteGame</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteGame\Damager.cpp">
-      <Filter>SpriteGame</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Build\Assets\Animations\coin_idle.json">
@@ -109,46 +64,5 @@
     <None Include="..\Build\Assets\SpriteGame\tilemaps\world_death.json">
       <Filter>Assets\SpriteGame\Tilemaps</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="SpaceGame\AmmoPickup.h">
-      <Filter>SpaceGame</Filter>
-    </ClInclude>
-    <ClInclude Include="SpaceGame\Assets.h">
-      <Filter>SpaceGame</Filter>
-    </ClInclude>
-    <ClInclude Include="SpaceGame\Bomb.h">
-      <Filter>SpaceGame</Filter>
-    </ClInclude>
-    <ClInclude Include="SpaceGame\Bullet.h">
-      <Filter>SpaceGame</Filter>
-    </ClInclude>
-    <ClInclude Include="SpaceGame\Enemy.h">
-      <Filter>SpaceGame</Filter>
-    </ClInclude>
-    <ClInclude Include="SpaceGame\Player.h">
-      <Filter>SpaceGame</Filter>
-    </ClInclude>
-    <ClInclude Include="SpaceGame\SpaceGame.h">
-      <Filter>SpaceGame</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteGame\SpriteGame.h">
-      <Filter>SpriteGame</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteGame\PlayerController.h">
-      <Filter>SpriteGame</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteGame\EnemyController.h">
-      <Filter>SpriteGame</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteGame\FlyingEnemyController.h">
-      <Filter>SpriteGame</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteGame\CharacterBase.h">
-      <Filter>SpriteGame</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteGame\Damager.h">
-      <Filter>SpriteGame</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
