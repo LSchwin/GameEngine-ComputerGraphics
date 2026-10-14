@@ -54,6 +54,7 @@ namespace nu
 		friend class Text;
 		friend class Texture;
 		friend class Shader;
+		friend class VertexBuffer;
 
 
 	private:
