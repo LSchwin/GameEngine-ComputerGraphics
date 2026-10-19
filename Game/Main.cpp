@@ -16,6 +16,7 @@
 using namespace nu;
 
 
+
 namespace nu
 {
     struct Color4
@@ -33,9 +34,9 @@ struct Vertex
 std::vector<Vertex> vertices =
 {
     Vertex{ Vector3{-0.5f, -0.5f, 0.0f}, Color4{1.0f, 0.0f, 0.0f, 1.0f}}, // Bottom-Left
-    Vertex{ Vector3{0.5f, -0.5f, 0.0f}, Color4{0.0f, 2.0f, 0.0f, 1.0f}},// Bottom-Right
-    Vertex{ Vector3{-0.5f, 0.5f, 0.0f}, Color4{0.0f, 0.0f, 1.0f, 1.0f}},// Top-Right
-    Vertex{ Vector3{0.5f,  0.5f, 0.0f}, Color4{0.0f, 0.0f, 1.0f, 1.0f}}// Top-Left
+    Vertex{ Vector3{0.5f, -0.5f, 0.0f}, Color4{0.0f, 1.0f, 0.0f, 1.0f}},// Bottom-Right
+    Vertex{ Vector3{0.5f, 0.5f, 0.0f}, Color4{0.0f, 0.0f, 1.0f, 1.0f}},// Top-Right
+    Vertex{ Vector3{-0.5f,  0.5f, 0.0f}, Color4{0.0f, 0.0f, 0.0f, 1.0f}}// Top-Left
 };
 
 
@@ -63,13 +64,14 @@ int main()
         glm::mat4 mvp;
     };
 
+
     vertexUniform uniform;
     glm::vec3 cameraPosition{ 0, 0, 5 };
     float rotation = 0.0f;
     
 
-    auto vshader = Resources().Get<nu::Shader>("shaders/position.vert", Engine::Get().GetRenderer(), 1);
-    auto fshader = Resources().Get<nu::Shader>("shaders/color.frag", Engine::Get().GetRenderer(), 1);
+    auto vshader = Resources().Get<nu::Shader>("shaders/unlit.vert", Engine::Get().GetRenderer(), 1);
+    auto fshader = Resources().Get<nu::Shader>("shaders/unlit.frag", Engine::Get().GetRenderer(), 1);
 
     auto pipeline = std::make_shared<Pipeline>();
     pipeline->AddVertexBuffer(sizeof(Vertex));
@@ -81,7 +83,7 @@ int main()
     //color
     pipeline->AddVertexAttribute(
         1,
-        SDL_GPU_VERTEXELEMENTFORMAT_FLOAT4,
+        SDL_GPU_VERTEXELEMENTFORMAT_FLOAT2,
         offsetof(Vertex, color));
 
     pipeline->Create(*vshader.get(), *fshader.get(),
@@ -91,6 +93,9 @@ int main()
     Color4 color{ 0, 0, 0, 1 };
     //TESTING
     
+
+    Transform transform;
+
 
     // MAIN LOOP
     bool quit = false;
@@ -107,8 +112,8 @@ int main()
         }
         // ENGINE
         Engine::Get().Update();
-
         float dt = Engine::Get().GetTime().GetDeltaTime();
+
         float time = Engine::Get().GetTime().GetTime();
 
         color.g = sin(time) * 0.5f + 0.5f;
@@ -124,31 +129,21 @@ int main()
 
         cameraPosition += direction * 4.0f * dt;
         
-        //rotation += dt * 200.0f;
-        //uniform.model = glm::mat4(1.0f);
-        //uniform.model = glm::translate(uniform.model, glm::vec3(0.5f, 0.0f, 0.0f));
-        //uniform.model = glm::rotate(uniform.model, glm::radians(rotation), glm::vec3(1.0f, 1.0f, 1.0f));
-        //uniform.model = glm::scale(uniform.model, glm::vec3(0.5f, 0.5f, 0.5f));
-
-
-        
-        auto mxt = glm::translate(glm::vec3(0.5f, 0.0f, 0.0f));
-        auto mxr = glm::eulerAngleYXZ(0.0f, 0.0f, time * 3.0f);
-        auto mxs = glm::scale(glm::vec3{ 1 });
-        
-        auto model = mxs * mxr * mxt;
+        // TRANSFORM
+        transform.rotation.z = time * 90;
 
         // VIEW
         auto view = glm::lookAtRH(cameraPosition, cameraPosition + glm::vec3{ 0, 0, -1 }, glm::vec3{0, 1, 0});
-
 
         // PROJECTION
         float aspectRatio = Engine::Get().GetRenderer().GetWidth() / (float)Engine::Get().GetRenderer().GetHeight();
         auto projection = glm::perspective(glm::radians(70.0f), aspectRatio, 0.01f, 20.0f);
 
-
-        uniform.mvp = projection * view * model;
+        // MVP
+        uniform.mvp = projection * view * transform.GetMatrix();
   
+
+
         //RENDER
         Engine::Get().GetRenderer().BeginFrame();
 

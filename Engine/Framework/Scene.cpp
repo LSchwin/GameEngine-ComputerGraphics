@@ -3,7 +3,6 @@
 #include "Actor.h"
 
 #include "Core/Factory.h"
-#include "Components/ColliderComponent.h"
 
 namespace nu
 {
@@ -107,17 +106,17 @@ namespace nu
 			{
 				if (actorA == actorB || actorA->m_destroyed || actorB->m_destroyed) continue;
 
-				auto colliderA = actorA->GetComponent<ColliderComponent>();
-				auto colliderB = actorB->GetComponent<ColliderComponent>();
-
-				if (!colliderA || !colliderB) continue;
-
-				// check collision
-				if (colliderA->CheckCollision(*colliderB))
-				{
-					actorA->OnCollision(actorB.get());
-					actorB->OnCollision(actorA.get());
-				}
+				//auto colliderA = actorA->GetComponent<ColliderComponent>();
+				//auto colliderB = actorB->GetComponent<ColliderComponent>();
+				//
+				//if (!colliderA || !colliderB) continue;
+				//
+				//// check collision
+				//if (colliderA->CheckCollision(*colliderB))
+				//{
+				//	actorA->OnCollision(actorB.get());
+				//	actorB->OnCollision(actorA.get());
+				//}
 			}
 		}
 
