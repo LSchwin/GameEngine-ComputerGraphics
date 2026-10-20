@@ -66,6 +66,10 @@ namespace nu
 			std::cerr << "Could not load resource: " << name << std::endl;
 			return res_t<T>();
 		}
+		else
+		{
+			std::cout << "Loaded Resource: " << name << std::endl;
+		}
 
 		// add resource to resource manager
 		m_resources[id] = resource;
