@@ -40,6 +40,8 @@ namespace nu
 
         std::cout << "GPU Driver: " << SDL_GetGPUDeviceDriver(m_gpuDevice) << std::endl;
 
+        CreateDepthBuffer();
+
         return true;
     }
 
@@ -98,7 +100,16 @@ namespace nu
             color_target_info.load_op = SDL_GPU_LOADOP_CLEAR;
             color_target_info.store_op = SDL_GPU_STOREOP_STORE;
 
-            m_renderPass = SDL_BeginGPURenderPass(m_commandBuffer, &color_target_info, 1, nullptr);
+            // configure the depth target (This handles the depth sorting)
+            SDL_GPUDepthStencilTargetInfo depth_target_info = {};
+            depth_target_info.texture = m_depthTexture;
+            depth_target_info.clear_depth = 1.0f;
+            depth_target_info.load_op = SDL_GPU_LOADOP_CLEAR;
+            depth_target_info.store_op = SDL_GPU_STOREOP_DONT_CARE;
+            depth_target_info.stencil_load_op = SDL_GPU_LOADOP_DONT_CARE;
+            depth_target_info.stencil_store_op = SDL_GPU_STOREOP_DONT_CARE;
+
+            m_renderPass = SDL_BeginGPURenderPass(m_commandBuffer, &color_target_info, 1, &depth_target_info);
             
         }
 
@@ -137,51 +148,6 @@ namespace nu
     void Renderer::DrawLine(float x1, float y1, float x2, float y2) const
     {
         SDL_RenderLine(m_renderer, x1, y1, x2, y2);
-    }
-
-    
-
-    void Renderer::DrawTexture(const Texture& texture, float x, float y, float angle, float scale, bool flipH, const Vector2& origin, float offset) const
-    {
-        Vector2 size = texture.GetSize();
-
-        float cameraX = (m_cameraEnabled) ? (m_camera.x - m_width * 0.5f) : 0.0f;
-        float cameraY = (m_cameraEnabled) ? (m_camera.y - m_height * 0.6f) : 0.0f;
-
-        SDL_FRect destRect;
-        destRect.w = size.x * scale;
-        destRect.h = size.y * scale;
-
-        destRect.x = (x - cameraX) - (destRect.w * origin.x) - (offset * (flipH ? 1 : -1));
-        destRect.y = (y - cameraY) - (destRect.h * origin.y);
-
-        // https://wiki.libsdl.org/SDL3/SDL_RenderTexture
-        SDL_RenderTextureRotated(m_renderer, texture.m_texture, NULL, &destRect, angle, NULL, (flipH) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-    }
-
-    void Renderer::DrawTexture(const Texture& texture, const Rect& source, float x, float y, float angle, float scale, bool flipH, const Vector2& origin, float offset) const
-    {
-        float cameraX = (m_cameraEnabled) ? (m_camera.x - m_width * 0.5f) : 0.0f;
-        float cameraY = (m_cameraEnabled) ? (m_camera.y - m_height * 0.6f) : 0.0f;
-
-        //Celastrina Version
-        SDL_FRect sourceRect;
-        sourceRect.x = source.x;
-        sourceRect.y = source.y;
-        sourceRect.w = source.w;
-        sourceRect.h = source.h;
-
-        SDL_FRect destRect;
-        destRect.w = source.w * scale;
-        destRect.h = source.h * scale;
-
-        destRect.x = (x - cameraX) - (destRect.w * origin.x) - (offset * (flipH ? 1 : -1));
-        destRect.y = (y - cameraY) - (destRect.h * origin.y);
-
-
-        //https://wiki.libsdl.org/SDL3/SDL_RenderTexture
-        //SDL_SetTextureScaleMode(texture.m_texture, SDL_SCALEMODE_NEAREST); //this line was the only change
-        SDL_RenderTextureRotated(m_renderer, texture.m_texture, &sourceRect, &destRect, angle, NULL, flipH ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
     }
 
 
@@ -279,6 +245,23 @@ namespace nu
     void Renderer::SetFragmentUniform(uint32_t slot, const void* data, uint32_t size)
     {
         SDL_PushGPUFragmentUniformData(m_commandBuffer, slot, data, size);
+    }
+
+    void Renderer::CreateDepthBuffer()
+    {
+        SDL_GPUTextureCreateInfo depthInfo{
+        .type = SDL_GPU_TEXTURETYPE_2D,
+        .format = SDL_GPU_TEXTUREFORMAT_D32_FLOAT,
+        .usage = SDL_GPU_TEXTUREUSAGE_DEPTH_STENCIL_TARGET,
+        .width = (uint32_t)m_width,
+        .height = (uint32_t)m_height,
+        .layer_count_or_depth = 1,
+        .num_levels = 1,
+        .sample_count = SDL_GPU_SAMPLECOUNT_1
+        };
+        
+
+        m_depthTexture = SDL_CreateGPUTexture(m_gpuDevice, &depthInfo);
     }
 
 }

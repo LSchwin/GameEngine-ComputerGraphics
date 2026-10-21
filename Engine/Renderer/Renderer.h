@@ -30,8 +30,8 @@ namespace nu
 		void DrawLine(float x1, float y1, float x2, float y2) const;
 
 		
-		void DrawTexture(const class Texture& texture, float x, float y, float angle = 0.0f, float scale = 1.0f, bool flipH = false, const Vector2& origin = Vector2{ 0.5f, 0.5f }, float offset = 0.0f) const;
-		void DrawTexture(const class Texture& texture, const struct Rect& source, float x, float y, float angle = 0.0f, float scale = 1.0f, bool flipH = false, const Vector2& origin = Vector2{ 0.5f, 0.5f }, float offset = 0.0f) const;
+		//void DrawTexture(const class Texture& texture, float x, float y, float angle = 0.0f, float scale = 1.0f, bool flipH = false, const Vector2& origin = Vector2{ 0.5f, 0.5f }, float offset = 0.0f) const;
+		//void DrawTexture(const class Texture& texture, const struct Rect& source, float x, float y, float angle = 0.0f, float scale = 1.0f, bool flipH = false, const Vector2& origin = Vector2{ 0.5f, 0.5f }, float offset = 0.0f) const;
 
 		int GetWidth() { return m_width;  }
 		int GetHeight() { return m_height;  }
@@ -39,7 +39,7 @@ namespace nu
 		void SetCamera(const Vector2& camera) { m_camera = camera; }
 		void EnableCamera(bool enable = true) { m_cameraEnabled = enable; }
 
-
+		// SDL GPU
 		SDL_GPUDevice* GetGPUDevice() const { return m_gpuDevice; }
 		SDL_Window* GetWindow() const { return m_window; }
 
@@ -52,6 +52,8 @@ namespace nu
 
 		void SetVertexUniform(uint32_t slot, const void* data, uint32_t size);
 		void SetFragmentUniform(uint32_t slot, const void* data, uint32_t size);
+
+		void CreateDepthBuffer();
 
 
 		friend class Text;
@@ -68,6 +70,7 @@ namespace nu
 		SDL_GPUDevice* m_gpuDevice = nullptr;
 		SDL_GPUCommandBuffer* m_commandBuffer = nullptr;
 		SDL_GPURenderPass* m_renderPass = nullptr;
+		SDL_GPUTexture* m_depthTexture = nullptr;
 
 
 		bool m_cameraEnabled = true;
