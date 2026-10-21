@@ -53,6 +53,8 @@ namespace nu
 		void SetVertexUniform(uint32_t slot, const void* data, uint32_t size);
 		void SetFragmentUniform(uint32_t slot, const void* data, uint32_t size);
 
+		void SetFragmentTexture(uint32_t slot, const class Texture& texture);
+
 		void CreateDepthBuffer();
 
 

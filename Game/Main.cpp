@@ -36,9 +36,10 @@ int main()
     Engine::Get().Initialize();
 
     auto model = Resources().Get<Model>("models/spot.obj", Engine::Get().GetRenderer());
+    auto texture = Resources().Get<Texture>("textures/spot_diffuse.png", Engine::Get().GetRenderer());
 
     auto vshader = Resources().Get<nu::Shader>("shaders/unlit.vert", Engine::Get().GetRenderer(), 1);
-    auto fshader = Resources().Get<nu::Shader>("shaders/unlit.frag", Engine::Get().GetRenderer(), 1);
+    auto fshader = Resources().Get<nu::Shader>("shaders/unlit.frag", Engine::Get().GetRenderer(), 1, 1);
 
     auto pipeline = std::make_shared<Pipeline>();
 
@@ -120,6 +121,8 @@ int main()
         Engine::Get().GetRenderer().SetPipeline(*pipeline);
         Engine::Get().GetRenderer().SetVertexUniform(0, &uniform, sizeof(uniform));
         Engine::Get().GetRenderer().SetFragmentUniform(0, &color, sizeof(color));
+
+        Engine::Get().GetRenderer().SetFragmentTexture(0, *texture); //cow
 
         model->Draw(Engine::Get().GetRenderer());
 

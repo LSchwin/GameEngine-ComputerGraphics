@@ -33,14 +33,24 @@ namespace nu
             return false;
         }
 
+       // SDL_SetHint(SDL_HINT_GPU_DRIVER, "vulkan");
         SDL_GPUShaderFormat formats = SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL;
         m_gpuDevice = SDL_CreateGPUDevice(formats, true, NULL);
+        if (!m_gpuDevice)
+        {
+            std::cerr << "Failed to create GPU Device: " << SDL_GetError() << std::endl;
+            SDL_DestroyWindow(m_window);
+            SDL_Quit();
+            return false;
+        }
 
         SDL_ClaimWindowForGPUDevice(m_gpuDevice, m_window);
 
         std::cout << "GPU Driver: " << SDL_GetGPUDeviceDriver(m_gpuDevice) << std::endl;
 
         CreateDepthBuffer();
+
+
 
         return true;
     }
@@ -245,6 +255,17 @@ namespace nu
     void Renderer::SetFragmentUniform(uint32_t slot, const void* data, uint32_t size)
     {
         SDL_PushGPUFragmentUniformData(m_commandBuffer, slot, data, size);
+    }
+
+    void Renderer::SetFragmentTexture(uint32_t slot, const Texture& texture)
+    {
+        SDL_GPUTextureSamplerBinding binding
+        {
+            .texture = texture.m_gpuTexture,
+            .sampler = texture.m_gpuSampler
+        };
+
+        SDL_BindGPUFragmentSamplers(m_renderPass, slot, &binding, 1);
     }
 
     void Renderer::CreateDepthBuffer()

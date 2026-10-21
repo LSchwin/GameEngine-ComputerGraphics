@@ -46,7 +46,7 @@ namespace nu
 			{
 				if (particle.texture)
 				{
-					renderer.DrawTexture(*particle.texture.get(), particle.position.x, particle.position.y);
+					//renderer.DrawTexture(*particle.texture.get(), particle.position.x, particle.position.y);
 				}
 				else
 				{

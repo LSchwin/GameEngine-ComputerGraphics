@@ -14,7 +14,7 @@ namespace nu
 		m_renderer.Initialize("Game Engine", 1920, 1024); //prof did 1280 instead of 1920
 		m_input.Initialize();
 		m_audio.Initialize();
-		m_particleSystem.Initialize(5000);
+		//m_particleSystem.Initialize(5000);
 		//m_physics.Initialize();
 		
 		return true;
@@ -25,7 +25,7 @@ namespace nu
 		m_input.Shutdown();
 		m_renderer.Shutdown();
 		m_audio.Shutdown();
-		m_particleSystem.Shutdown();
+		//m_particleSystem.Shutdown();
 		//m_physics.Shutdown();
 	}
 
@@ -34,7 +34,7 @@ namespace nu
 		m_input.Update();
 		m_time.Tick();
 		m_audio.Update();
-		m_particleSystem.Update(m_time.GetDeltaTime());
+		//m_particleSystem.Update(m_time.GetDeltaTime());
 		//m_physics.Update(m_time.GetDeltaTime());
 	}
 }
