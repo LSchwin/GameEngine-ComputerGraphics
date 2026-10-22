@@ -38,8 +38,8 @@ int main()
     auto model = Resources().Get<Model>("models/spot.obj", Engine::Get().GetRenderer());
     auto texture = Resources().Get<Texture>("textures/spot_diffuse.png", Engine::Get().GetRenderer());
 
-    auto vshader = Resources().Get<nu::Shader>("shaders/unlit.vert", Engine::Get().GetRenderer(), 1);
-    auto fshader = Resources().Get<nu::Shader>("shaders/unlit.frag", Engine::Get().GetRenderer(), 1, 1);
+    auto vshader = Resources().Get<nu::Shader>("shaders/lit.vert", Engine::Get().GetRenderer(), 2);
+    auto fshader = Resources().Get<nu::Shader>("shaders/lit.frag", Engine::Get().GetRenderer(), 1, 1);
 
     auto pipeline = std::make_shared<Pipeline>();
 
@@ -54,17 +54,36 @@ int main()
         Engine::Get().GetRenderer().GetWindow());
 
     //TESTING
+    //UNIFORMS
     struct vertexUniform
     {
         glm::mat4 mvp;
+        glm::mat4 model;
+    };
+    vertexUniform vertexUniform;
+
+    struct LightUniform
+    {
+        glm::vec3 lightDirection;
+        float padding1;
+        glm::vec3 lightColor;
+        float lightIntensity;
+        glm::vec3 ambient;
+        float padding2;
+    };
+
+    LightUniform lightUniform{
+        .lightDirection{0, -1, 0},
+        .lightColor{0, 1, 0},
+        .lightIntensity{ 1 },
+        .ambient{ 0.2f }
     };
 
 
-    vertexUniform uniform;
     glm::vec3 cameraPosition{ 0, 0, 5 };
     //float rotation = 0.0f;
 
-    Color4 color{ 0, 0, 0, 1 };
+    Color4 tint{ 1, 1, 1, 1 };
     //TESTING
     
 
@@ -89,8 +108,8 @@ int main()
         float dt = Engine::Get().GetTime().GetDeltaTime();
         float time = Engine::Get().GetTime().GetTime();
 
+        //tint.g = sin(time) * 0.5f + 0.5f;
 
-        //color.g = sin(time) * 0.5f + 0.5f;
         glm::vec3 direction{ 0 };
         if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_A)) direction.x = -1.0f;
         if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_D)) direction.x = 1.0f;
@@ -103,7 +122,7 @@ int main()
 
         
         // TRANSFORM
-        transform.rotation.z = time * 90;
+        transform.rotation.x = time * 90;
 
         // VIEW
         auto view = glm::lookAtRH(cameraPosition, cameraPosition + glm::vec3{ 0, 0, -1 }, glm::vec3{0, 1, 0});
@@ -113,14 +132,17 @@ int main()
         auto projection = glm::perspective(glm::radians(70.0f), aspectRatio, 0.01f, 20.0f);
 
         // MVP
-        uniform.mvp = projection * view * transform.GetMatrix();
+        vertexUniform.model = transform.GetMatrix();
+        vertexUniform.mvp = projection * view * vertexUniform.model;
   
+
         //RENDER
         Engine::Get().GetRenderer().BeginFrame();
 
         Engine::Get().GetRenderer().SetPipeline(*pipeline);
-        Engine::Get().GetRenderer().SetVertexUniform(0, &uniform, sizeof(uniform));
-        Engine::Get().GetRenderer().SetFragmentUniform(0, &color, sizeof(color));
+        Engine::Get().GetRenderer().SetVertexUniform(0, &vertexUniform, sizeof(vertexUniform));
+        Engine::Get().GetRenderer().SetVertexUniform(1, &lightUniform, sizeof(lightUniform));
+        Engine::Get().GetRenderer().SetFragmentUniform(0, &tint, sizeof(tint));
 
         Engine::Get().GetRenderer().SetFragmentTexture(0, *texture); //cow
 
