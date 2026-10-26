@@ -15,16 +15,12 @@
 
 using namespace nu;
 
-
-
-namespace nu
+enum class LightType : uint32_t
 {
-    struct Color4
-    {
-        float r, g, b, a;
-    };
-}
-
+    Directional,
+    Point,
+    Spot
+};
 
 int main()
 {
@@ -38,8 +34,8 @@ int main()
     auto model = Resources().Get<Model>("models/spot.obj", Engine::Get().GetRenderer());
     auto texture = Resources().Get<Texture>("textures/spot_diffuse.png", Engine::Get().GetRenderer());
 
-    auto vshader = Resources().Get<nu::Shader>("shaders/lit.vert", Engine::Get().GetRenderer(), 2);
-    auto fshader = Resources().Get<nu::Shader>("shaders/lit.frag", Engine::Get().GetRenderer(), 1, 1);
+    auto vshader = Resources().Get<nu::Shader>("shaders/gouraud.vert", Engine::Get().GetRenderer(), 3);
+    auto fshader = Resources().Get<nu::Shader>("shaders/gouraud.frag", Engine::Get().GetRenderer(), 1, 1);
 
     auto pipeline = std::make_shared<Pipeline>();
 
@@ -59,31 +55,49 @@ int main()
     {
         glm::mat4 mvp;
         glm::mat4 model;
+        glm::vec3 cameraPosition;
+        float padding1;
     };
     vertexUniform vertexUniform;
 
     struct LightUniform
     {
-        glm::vec3 lightDirection;
-        float padding1;
-        glm::vec3 lightColor;
-        float lightIntensity;
-        glm::vec3 ambient;
+        glm::vec3 position;
+        uint32_t type;
+
+        glm::vec3 direction;
         float padding2;
+        glm::vec3 color;
+        float intensity;
+        glm::vec3 ambient;
+        float padding3;
     };
 
     LightUniform lightUniform{
-        .lightDirection{0, -1, 0},
-        .lightColor{0, 1, 0},
-        .lightIntensity{ 1 },
+        .position{ 10, 10, 10},
+        .type{ (uint32_t)LightType::Point },
+        .direction{0, -1, 0},
+        .color{1, 1, 1},
+        .intensity{ 1 },
         .ambient{ 0.2f }
     };
 
+    struct MaterialUniform
+    {
+        glm::vec2 tiling;
+        glm::vec2 offset;
+    };
 
-    glm::vec3 cameraPosition{ 0, 0, 5 };
-    //float rotation = 0.0f;
+    MaterialUniform materialUniform
+    {
+        .tiling{ 1.0f, 1.0f },
+        .offset{ 0.0f, 0.0f}
+    };
 
-    Color4 tint{ 1, 1, 1, 1 };
+
+    vertexUniform.cameraPosition = glm::vec3{ 0, 0, 5 };
+
+    glm::vec4 tint{ 1, 1, 1, 1 };
     //TESTING
     
 
@@ -117,15 +131,22 @@ int main()
         if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_W)) direction.y = 1.0f;
         if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_Q)) direction.z = -1.0f;
         if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_E)) direction.z = 1.0f;
-        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_R)) cameraPosition = glm::vec3{ 0, 0, 5 };
-        cameraPosition += direction * 4.0f * dt;
+        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_R)) vertexUniform.cameraPosition = glm::vec3{ 0, 0, 5 };
+        vertexUniform.cameraPosition += direction * 4.0f * dt;
+
+        //if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_1)) 
+        //if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_2)) direction.x = -1.0f;
+        
+
+        //materialUniform.offset.x = time;
+        //materialUniform.tiling = glm::vec2{ 2.0f };
 
         
         // TRANSFORM
-        transform.rotation.x = time * 90;
+        //transform.rotation.x = time * 90;
 
         // VIEW
-        auto view = glm::lookAtRH(cameraPosition, cameraPosition + glm::vec3{ 0, 0, -1 }, glm::vec3{0, 1, 0});
+        auto view = glm::lookAtRH(vertexUniform.cameraPosition, vertexUniform.cameraPosition + glm::vec3{ 0, 0, -1 }, glm::vec3{0, 1, 0});
 
         // PROJECTION
         float aspectRatio = Engine::Get().GetRenderer().GetWidth() / (float)Engine::Get().GetRenderer().GetHeight();
@@ -142,8 +163,8 @@ int main()
         Engine::Get().GetRenderer().SetPipeline(*pipeline);
         Engine::Get().GetRenderer().SetVertexUniform(0, &vertexUniform, sizeof(vertexUniform));
         Engine::Get().GetRenderer().SetVertexUniform(1, &lightUniform, sizeof(lightUniform));
+        Engine::Get().GetRenderer().SetVertexUniform(2, &materialUniform, sizeof(materialUniform));
         Engine::Get().GetRenderer().SetFragmentUniform(0, &tint, sizeof(tint));
-
         Engine::Get().GetRenderer().SetFragmentTexture(0, *texture); //cow
 
         model->Draw(Engine::Get().GetRenderer());
