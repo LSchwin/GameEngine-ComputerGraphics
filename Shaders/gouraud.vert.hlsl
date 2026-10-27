@@ -1,14 +1,18 @@
-#include "Lighting.hlsli"
+#include "lighting.hlsli"
 
-cbuffer Uniforms : register(b0, space1)
+cbuffer VertexUniforms : register(b0, space1)
 {
     float4x4 mvp;
     float4x4 model;
+    float3 cameraPosition;
+    float padding1;
 };
+
 cbuffer LightUniforms : register(b1, space1)
 {
     Light light;
 };
+
 cbuffer MatUniforms : register(b2, space1)
 {
     Material material;
@@ -36,34 +40,28 @@ Output main(Input input)
     output.position = mul(mvp, float4(input.position, 1.0f));
 
     float3 worldPos = mul(model, float4(input.position, 1.0f)).xyz;
+    float3 radiance = light.color * light.intensity; // .rgb?
+    float attenuation;
+    float3 L = getLightVector(light, worldPos, attenuation);
+    float3 N = normalize(mul((float3x3) model, input.normal));
 
     //DIFFUSE
-    float3 N = normalize(mul((float3x3) model, input.normal));
-    float3 L;
-
-    switch (light.type)
-    {
-        case LIGHT_DIRECTIONAL:
-            L = normalize(-light.direction);
-            break;
-        case LIGHT_POINT:
-            L = normalize(light.position - worldPos); //did the -1 multiplication as a quick fix
-            break;
-    };
-
     float NdotL = saturate(dot(N, L * -1));
-
-    float3 diffuse = light.color.rgb * light.intensity * NdotL;
-
+    float3 diffuse = radiance * NdotL * attenuation;
     output.diffuse = diffuse + light.ambient;
 
     //SPECULAR
-    output.specular = 0;
-    if (NdotL)
+    output.specular = float3(0, 0, 0);
+    
+    if (NdotL > 0)
     {
-        float3 R = reflect(-L, N);
+        // Blinn-Phong Specular
+        float3 V = normalize(cameraPosition - worldPos);
+        float3 H = normalize(V + L);
+        float HdotN = saturate(dot(H, N));
+        HdotN = pow(HdotN, material.shininess);
+        output.specular = radiance * HdotN * attenuation;
     }
-
-
+    
     return output;
 }

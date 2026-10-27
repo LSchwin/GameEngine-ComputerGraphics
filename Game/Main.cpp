@@ -64,40 +64,43 @@ int main()
     {
         glm::vec3 position;
         uint32_t type;
-
         glm::vec3 direction;
-        float padding2;
+        float innerCutoff;
         glm::vec3 color;
         float intensity;
         glm::vec3 ambient;
-        float padding3;
+        float outerCutoff;
     };
 
     LightUniform lightUniform{
         .position{ 10, 10, 10},
         .type{ (uint32_t)LightType::Point },
         .direction{0, -1, 0},
+        .innerCutoff{ 0.3f },
         .color{1, 1, 1},
         .intensity{ 1 },
-        .ambient{ 0.2f }
+        .ambient{ 0.2f },
+        .outerCutoff{ 0.6f }
     };
 
     struct MaterialUniform
     {
+        glm::vec4 color;
         glm::vec2 tiling;
         glm::vec2 offset;
+        float shininess;
     };
 
     MaterialUniform materialUniform
     {
+        .color{ 1, 1, 1, 1},
         .tiling{ 1.0f, 1.0f },
-        .offset{ 0.0f, 0.0f}
+        .offset{ 0.0f, 0.0f},
+        .shininess{ 64.0f }
     };
 
 
     vertexUniform.cameraPosition = glm::vec3{ 0, 0, 5 };
-
-    glm::vec4 tint{ 1, 1, 1, 1 };
     //TESTING
     
 
@@ -134,16 +137,20 @@ int main()
         if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_R)) vertexUniform.cameraPosition = glm::vec3{ 0, 0, 5 };
         vertexUniform.cameraPosition += direction * 4.0f * dt;
 
-        //if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_1)) 
-        //if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_2)) direction.x = -1.0f;
-        
+        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_1)) lightUniform.type = (uint32_t)LightType::Point;
+        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_2)) lightUniform.type = (uint32_t)LightType::Directional;
+        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_3))
+        {
+            lightUniform.type = (uint32_t)LightType::Spot;
+            lightUniform.position = glm::vec3{ 0, 0, 0 };
+        }
 
         //materialUniform.offset.x = time;
         //materialUniform.tiling = glm::vec2{ 2.0f };
 
         
         // TRANSFORM
-        //transform.rotation.x = time * 90;
+        transform.rotation.x = time * 90;
 
         // VIEW
         auto view = glm::lookAtRH(vertexUniform.cameraPosition, vertexUniform.cameraPosition + glm::vec3{ 0, 0, -1 }, glm::vec3{0, 1, 0});
@@ -164,7 +171,8 @@ int main()
         Engine::Get().GetRenderer().SetVertexUniform(0, &vertexUniform, sizeof(vertexUniform));
         Engine::Get().GetRenderer().SetVertexUniform(1, &lightUniform, sizeof(lightUniform));
         Engine::Get().GetRenderer().SetVertexUniform(2, &materialUniform, sizeof(materialUniform));
-        Engine::Get().GetRenderer().SetFragmentUniform(0, &tint, sizeof(tint));
+
+        Engine::Get().GetRenderer().SetFragmentUniform(0, &materialUniform, sizeof(materialUniform));
         Engine::Get().GetRenderer().SetFragmentTexture(0, *texture); //cow
 
         model->Draw(Engine::Get().GetRenderer());
