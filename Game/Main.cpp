@@ -13,6 +13,10 @@
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/transform.hpp>
 
+#define CHECK_UNIFORM_BOUNDRY(T) static_assert((sizeof(T) % 16) == 0);
+
+
+
 using namespace nu;
 
 enum class LightType : uint32_t
@@ -34,8 +38,8 @@ int main()
     auto model = Resources().Get<Model>("models/spot.obj", Engine::Get().GetRenderer());
     auto texture = Resources().Get<Texture>("textures/spot_diffuse.png", Engine::Get().GetRenderer());
 
-    auto vshader = Resources().Get<nu::Shader>("shaders/gouraud.vert", Engine::Get().GetRenderer(), 3);
-    auto fshader = Resources().Get<nu::Shader>("shaders/gouraud.frag", Engine::Get().GetRenderer(), 1, 1);
+    auto vshader = Resources().Get<nu::Shader>("shaders/phong.vert", Engine::Get().GetRenderer(), 3);
+    auto fshader = Resources().Get<nu::Shader>("shaders/phong.frag", Engine::Get().GetRenderer(), 3, 1);
 
     auto pipeline = std::make_shared<Pipeline>();
 
@@ -59,27 +63,33 @@ int main()
         float padding1;
     };
     vertexUniform vertexUniform;
+    CHECK_UNIFORM_BOUNDRY(vertexUniform)
+
 
     struct LightUniform
     {
         glm::vec3 position;
         uint32_t type;
         glm::vec3 direction;
-        float innerCutoff;
+        float range;
         glm::vec3 color;
         float intensity;
         glm::vec3 ambient;
+        float innerCutoff;
         float outerCutoff;
+        glm::vec3 padding;
     };
+    CHECK_UNIFORM_BOUNDRY(LightUniform)
 
     LightUniform lightUniform{
         .position{ 10, 10, 10},
         .type{ (uint32_t)LightType::Point },
         .direction{0, -1, 0},
-        .innerCutoff{ 0.3f },
+        .range{ 40 },
         .color{1, 1, 1},
         .intensity{ 1 },
         .ambient{ 0.2f },
+        .innerCutoff{ 0.3f },
         .outerCutoff{ 0.6f }
     };
 
@@ -89,7 +99,9 @@ int main()
         glm::vec2 tiling;
         glm::vec2 offset;
         float shininess;
+        glm::vec3 padding;
     };
+    CHECK_UNIFORM_BOUNDRY(MaterialUniform)
 
     MaterialUniform materialUniform
     {
@@ -137,12 +149,22 @@ int main()
         if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_R)) vertexUniform.cameraPosition = glm::vec3{ 0, 0, 5 };
         vertexUniform.cameraPosition += direction * 4.0f * dt;
 
-        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_1)) lightUniform.type = (uint32_t)LightType::Point;
-        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_2)) lightUniform.type = (uint32_t)LightType::Directional;
+        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_1))
+        {
+            lightUniform.type = (uint32_t)LightType::Point;
+            lightUniform.position = glm::vec3{ 10, 10, 10 };
+        }
+        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_2)) 
+        {
+            lightUniform.type = (uint32_t)LightType::Directional;
+            lightUniform.position = glm::vec3{ 10, 10, 10 };
+        }
         if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_3))
         {
             lightUniform.type = (uint32_t)LightType::Spot;
             lightUniform.position = glm::vec3{ 0, 0, 0 };
+            lightUniform.innerCutoff = glm::cos(glm::radians(30.0f));
+            lightUniform.outerCutoff = glm::cos(glm::radians(60.0f));
         }
 
         //materialUniform.offset.x = time;
@@ -172,7 +194,9 @@ int main()
         Engine::Get().GetRenderer().SetVertexUniform(1, &lightUniform, sizeof(lightUniform));
         Engine::Get().GetRenderer().SetVertexUniform(2, &materialUniform, sizeof(materialUniform));
 
-        Engine::Get().GetRenderer().SetFragmentUniform(0, &materialUniform, sizeof(materialUniform));
+        Engine::Get().GetRenderer().SetFragmentUniform(0, &vertexUniform, sizeof(vertexUniform)); //phong
+        Engine::Get().GetRenderer().SetFragmentUniform(1, &lightUniform, sizeof(lightUniform)); //phong
+        Engine::Get().GetRenderer().SetFragmentUniform(2, &materialUniform, sizeof(materialUniform)); //phong (for gouraud)
         Engine::Get().GetRenderer().SetFragmentTexture(0, *texture); //cow
 
         model->Draw(Engine::Get().GetRenderer());
