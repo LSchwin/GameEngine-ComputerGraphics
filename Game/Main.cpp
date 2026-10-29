@@ -15,7 +15,7 @@
 
 #define CHECK_UNIFORM_BOUNDRY(T) static_assert((sizeof(T) % 16) == 0);
 
-
+#define MAX_LIGHTS 8
 
 using namespace nu;
 
@@ -35,8 +35,8 @@ int main()
     // INITIALIZATION
     Engine::Get().Initialize();
 
-    auto model = Resources().Get<Model>("models/spot.obj", Engine::Get().GetRenderer());
-    auto texture = Resources().Get<Texture>("textures/spot_diffuse.png", Engine::Get().GetRenderer());
+    auto model = Resources().Get<Model>("models/sphere.obj", Engine::Get().GetRenderer());
+    auto texture = Resources().Get<Texture>("textures/ogre_diffuse.bmp", Engine::Get().GetRenderer());
 
     auto vshader = Resources().Get<nu::Shader>("shaders/phong.vert", Engine::Get().GetRenderer(), 3);
     auto fshader = Resources().Get<nu::Shader>("shaders/phong.frag", Engine::Get().GetRenderer(), 3, 1);
@@ -65,8 +65,7 @@ int main()
     vertexUniform vertexUniform;
     CHECK_UNIFORM_BOUNDRY(vertexUniform)
 
-
-    struct LightUniform
+    struct Light
     {
         glm::vec3 position;
         uint32_t type;
@@ -79,19 +78,45 @@ int main()
         float outerCutoff;
         glm::vec3 padding;
     };
-    CHECK_UNIFORM_BOUNDRY(LightUniform)
 
-    LightUniform lightUniform{
+    struct LightUniform
+    {
+        Light lights[MAX_LIGHTS];
+        uint32_t numLights;
+        glm::vec3 ambient;
+    };
+    CHECK_UNIFORM_BOUNDRY(LightUniform)
+    LightUniform lightUniform;
+
+    Light light1{
         .position{ 10, 10, 10},
         .type{ (uint32_t)LightType::Point },
         .direction{0, -1, 0},
         .range{ 40 },
-        .color{1, 1, 1},
+        .color{1, 0, 0},
         .intensity{ 1 },
         .ambient{ 0.2f },
         .innerCutoff{ 0.3f },
         .outerCutoff{ 0.6f }
     };
+
+    Light light2{
+        .position{ -10, 10, 10},
+        .type{ (uint32_t)LightType::Point },
+        .direction{0, -1, 0},
+        .range{ 40 },
+        .color{0, 1, 0},
+        .intensity{ 1 },
+        .ambient{ 0.2f },
+        .innerCutoff{ 0.3f },
+        .outerCutoff{ 0.6f }
+    };
+
+    lightUniform.lights[0] = light1;
+    lightUniform.lights[1] = light2;
+    lightUniform.numLights = 2;
+    lightUniform.ambient = glm::vec3{ 0.2f };
+
 
     struct MaterialUniform
     {
@@ -108,7 +133,7 @@ int main()
         .color{ 1, 1, 1, 1},
         .tiling{ 1.0f, 1.0f },
         .offset{ 0.0f, 0.0f},
-        .shininess{ 64.0f }
+        .shininess{ 32.0f }
     };
 
 
@@ -149,30 +174,35 @@ int main()
         if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_R)) vertexUniform.cameraPosition = glm::vec3{ 0, 0, 5 };
         vertexUniform.cameraPosition += direction * 4.0f * dt;
 
-        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_1))
-        {
-            lightUniform.type = (uint32_t)LightType::Point;
-            lightUniform.position = glm::vec3{ 10, 10, 10 };
-        }
-        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_2)) 
-        {
-            lightUniform.type = (uint32_t)LightType::Directional;
-            lightUniform.position = glm::vec3{ 10, 10, 10 };
-        }
-        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_3))
-        {
-            lightUniform.type = (uint32_t)LightType::Spot;
-            lightUniform.position = glm::vec3{ 0, 0, 0 };
-            lightUniform.innerCutoff = glm::cos(glm::radians(30.0f));
-            lightUniform.outerCutoff = glm::cos(glm::radians(60.0f));
-        }
+        lightUniform.lights[0].position = glm::eulerAngleY(time) * glm::vec4{0, 0, 10, 1};
+        lightUniform.lights[1].position = glm::eulerAngleY(time * 0.5) * glm::vec4{0, 0, 10, 1};
+
+
+        //if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_1))
+        //{
+        //    lightUniform.type = (uint32_t)LightType::Point;
+        //    lightUniform.position = glm::vec3{ 10, 10, 10 };
+        //}
+        //if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_2)) 
+        //{
+        //    lightUniform.type = (uint32_t)LightType::Directional;
+        //    lightUniform.position = glm::vec3{ 10, 10, 10 };
+        //}
+        //if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_3))
+        //{
+        //    lightUniform.type = (uint32_t)LightType::Spot;
+        //    lightUniform.position = glm::vec3{ 0, 0, 0 };
+        //    lightUniform.innerCutoff = glm::cos(glm::radians(30.0f));
+        //    lightUniform.outerCutoff = glm::cos(glm::radians(60.0f));
+        //}
+
 
         //materialUniform.offset.x = time;
         //materialUniform.tiling = glm::vec2{ 2.0f };
 
         
         // TRANSFORM
-        transform.rotation.x = time * 90;
+        //transform.rotation.x = time * 90;
 
         // VIEW
         auto view = glm::lookAtRH(vertexUniform.cameraPosition, vertexUniform.cameraPosition + glm::vec3{ 0, 0, -1 }, glm::vec3{0, 1, 0});

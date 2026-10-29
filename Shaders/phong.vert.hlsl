@@ -10,7 +10,9 @@ cbuffer VertexUniforms : register(b0, space1)
 
 cbuffer LightUniforms : register(b1, space1)
 {
-    Light light;
+    Light lights[MAX_LIGHTS];
+    uint numLights; 
+    float3 ambient;
 };
 
 cbuffer MatUniforms : register(b2, space1)
@@ -41,8 +43,6 @@ Output main(Input input)
 
     output.worldPos = mul(model, float4(input.position, 1.0f)).xyz;
     output.normal = normalize(mul((float3x3) model, input.normal));
-    
-    
     
     return output;
 }
