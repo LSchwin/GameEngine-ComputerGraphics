@@ -71,7 +71,7 @@ float3 getLightVector(Light light, float3 position, out float attenuation)
 float3 calculateDiffuse(float3 radiance, float3 N, float3 L)
 {
     // diffuse is the dot product of the normal and light vector
-    return radiance * saturate(dot(N, L * -1));
+    return radiance * saturate(dot(N, L));
 }
 
 float3 calculateSpecular(float3 radiance, float3 N, float3 L, float3 V, Material material)
@@ -84,7 +84,7 @@ float3 calculateSpecular(float3 radiance, float3 N, float3 L, float3 V, Material
         float HdotN = saturate(dot(H, N));
         HdotN = pow(HdotN, material.shininess);
         
-        specular = radiance * HdotN;
+        specular = HdotN * radiance;
     }
 
     return specular;
