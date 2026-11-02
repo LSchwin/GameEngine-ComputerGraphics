@@ -5,6 +5,8 @@
 #include "Renderer/VertexBuffer.h"
 #include "Renderer/IndexBuffer.h"
 
+#include "Framework/Scene.h"
+
 #include "Resources/ResourceManager.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -35,6 +37,10 @@ int main()
     // INITIALIZATION
     Engine::Get().Initialize();
 
+    Scene scene;
+    scene.Load("scenes/scene.json");
+
+    // TESTING
     auto model = Resources().Get<Model>("models/ogre.obj", Engine::Get().GetRenderer());
     auto texture = Resources().Get<Texture>("textures/ogre_diffuse.bmp", Engine::Get().GetRenderer());
 
