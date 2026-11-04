@@ -10,7 +10,9 @@ cbuffer VertexUniforms : register(b0, space1)
 
 cbuffer LightUniforms : register(b1, space1)
 {
-    Light light;
+    Light lights[MAX_LIGHTS];
+    uint numLights;
+    float3 ambient;
 };
 
 cbuffer MatUniforms : register(b2, space1)
@@ -43,7 +45,13 @@ Output main(Input input)
     float3 N = normalize(mul((float3x3) model, input.normal));
     float3 V = normalize(cameraPosition - worldPos);
     
-    calculateLighting(light, material, worldPos, N, V, output.diffuse, output.specular);
+    output.diffuse = ambient;
+    output.specular = 0; //?
+    
+    for (uint i = 0; i < numLights; i++)
+    {
+        calculateLighting(lights[i], material, worldPos, normalize(input.normal), V, output.diffuse, output.specular);
+    }
     
     return output;
 }
