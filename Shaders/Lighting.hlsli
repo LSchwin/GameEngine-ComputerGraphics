@@ -22,12 +22,20 @@ struct Light
     
     float3 direction;
     float range;
+    
     float3 color;
     float intensity;
-    float3 ambient;
+    
     float innerCutoff;
     float outerCutoff;
-    float3 padding;
+    float2 padding;
+};
+
+struct Lights
+{
+    Light lights[MAX_LIGHTS];
+    float3 ambient;
+    uint count;
 };
 
 

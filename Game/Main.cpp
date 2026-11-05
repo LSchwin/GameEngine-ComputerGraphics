@@ -71,7 +71,7 @@ int main()
         float padding1;
     };
     vertexUniform vertexUniform;
-    CHECK_UNIFORM_BOUNDRY(vertexUniform)
+    CHECK_UNIFORM_BOUNDRY(vertexUniform);
 
     struct Light
     {
@@ -81,10 +81,9 @@ int main()
         float range;
         glm::vec3 color;
         float intensity;
-        glm::vec3 ambient;
         float innerCutoff;
         float outerCutoff;
-        glm::vec3 padding;
+        glm::vec2 padding;
     };
 
     struct LightUniform
@@ -93,7 +92,7 @@ int main()
         uint32_t numLights;
         glm::vec3 ambient;
     };
-    CHECK_UNIFORM_BOUNDRY(LightUniform)
+    CHECK_UNIFORM_BOUNDRY(LightUniform);
     LightUniform lightUniform;
 
     Light light1{
@@ -103,7 +102,6 @@ int main()
         .range{ 40 },
         .color{1, 0, 0},
         .intensity{ 1 },
-        .ambient{ 0.2f },
         .innerCutoff{ 0.3f },
         .outerCutoff{ 0.6f }
     };
@@ -115,7 +113,6 @@ int main()
         .range{ 40 },
         .color{0, 1, 0},
         .intensity{ 1 },
-        .ambient{ 0.2f },
         .innerCutoff{ 0.3f },
         .outerCutoff{ 0.6f }
     };
@@ -127,7 +124,6 @@ int main()
         .range{ 40 },
         .color{0, 0, 1},
         .intensity{ 1 },
-        .ambient{ 0.2f },
         .innerCutoff{ 0.3f },
         .outerCutoff{ 0.6f }
     };
@@ -147,7 +143,7 @@ int main()
         float shininess;
         glm::vec3 padding;
     };
-    CHECK_UNIFORM_BOUNDRY(MaterialUniform)
+    CHECK_UNIFORM_BOUNDRY(MaterialUniform);
 
     MaterialUniform materialUniform
     {
@@ -191,6 +187,7 @@ int main()
         // TRANSFORM
         //transform.rotation.x = time * 90;
  
+        // Camera
         auto camera = scene.GetActorByName("Camera");
         auto cameraComponent = camera->GetComponent<CameraComponent>();
         vertexUniform.cameraPosition = camera->GetTransform().position;
@@ -204,13 +201,14 @@ int main()
         Engine::Get().GetRenderer().BeginFrame();
 
         Engine::Get().GetRenderer().SetPipeline(*pipeline);
-        Engine::Get().GetRenderer().SetVertexUniform(0, &vertexUniform, sizeof(vertexUniform));
-        Engine::Get().GetRenderer().SetVertexUniform(1, &lightUniform, sizeof(lightUniform));
-        Engine::Get().GetRenderer().SetVertexUniform(2, &materialUniform, sizeof(materialUniform));
+        Engine::Get().GetRenderer().SetVertexUniform(UniformSlot::Object, &vertexUniform, sizeof(vertexUniform));
+        Engine::Get().GetRenderer().SetVertexUniform(UniformSlot::Light, &lightUniform, sizeof(lightUniform));
+        Engine::Get().GetRenderer().SetVertexUniform(UniformSlot::Material, &materialUniform, sizeof(materialUniform));
 
-        Engine::Get().GetRenderer().SetFragmentUniform(0, &vertexUniform, sizeof(vertexUniform)); //phong
-        Engine::Get().GetRenderer().SetFragmentUniform(1, &lightUniform, sizeof(lightUniform)); //phong
-        Engine::Get().GetRenderer().SetFragmentUniform(2, &materialUniform, sizeof(materialUniform)); //phong (for gouraud) 0 for gouraud and 2 for phong
+        Engine::Get().GetRenderer().SetFragmentUniform(UniformSlot::Object, &vertexUniform, sizeof(vertexUniform)); //phong
+        Engine::Get().GetRenderer().SetFragmentUniform(UniformSlot::Light, &lightUniform, sizeof(lightUniform)); //phong
+        Engine::Get().GetRenderer().SetFragmentUniform(UniformSlot::Material, &materialUniform, sizeof(materialUniform)); //phong (for gouraud) 0 for gouraud and 2 for phong
+
         Engine::Get().GetRenderer().SetFragmentTexture(0, *texture); //model
 
         model->Draw(Engine::Get().GetRenderer());
