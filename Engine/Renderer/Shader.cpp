@@ -13,7 +13,7 @@ namespace nu
 		if (m_gpuDevice && m_gpuShader) SDL_ReleaseGPUShader(m_gpuDevice, m_gpuShader);
 	}
 
-	bool Shader::Load(const std::string& filename, Renderer& renderer, uint32_t uniformCount, uint32_t samplerCount)
+	bool Shader::Load(const std::string& filename, const Renderer& renderer, uint32_t uniformCount, uint32_t samplerCount)
 	{
 		// store the renderer's gpu device in m_gpuDevice so the destructor can release the shader later
 		m_gpuDevice = renderer.GetGPUDevice();

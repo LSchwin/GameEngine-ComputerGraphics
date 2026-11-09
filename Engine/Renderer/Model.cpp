@@ -2,6 +2,9 @@
 #include "Model.h"
 #include "Renderer.h"
 
+//TESTING
+#include "Engine/Engine.h"
+
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -185,7 +188,7 @@ namespace nu
 				}
 				else
 				{
-					auto texture = Resources().Get<Texture>(directory + path.C_Str(), renderer);
+					auto texture = Resources().Get<Texture>(directory + path.C_Str(), Engine::Get().GetRenderer()); //it was mad before cuz the 'renderer' variable was const (replaced with GetRenderer())
 					if (!instance.SetTexture("base_map", texture))
 					{
 						std::cerr << "Material has no base_map slot for texture: " << path.C_Str() << std::endl;
