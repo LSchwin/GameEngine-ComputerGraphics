@@ -33,7 +33,7 @@ namespace nu
             return false;
         }
 
-       // SDL_SetHint(SDL_HINT_GPU_DRIVER, "vulkan");
+        SDL_SetHint(SDL_HINT_GPU_DRIVER, "vulkan");
         SDL_GPUShaderFormat formats = SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL;
         m_gpuDevice = SDL_CreateGPUDevice(formats, true, NULL);
         if (!m_gpuDevice)

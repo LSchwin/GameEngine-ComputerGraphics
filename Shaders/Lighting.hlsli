@@ -83,7 +83,7 @@ float3 calculateDiffuse(float3 radiance, float3 N, float3 L)
 }
 
 float3 calculateSpecular(float3 radiance, float3 N, float3 L, float3 V, Material material)
-{
+{ 
     float3 specular = float3(0, 0, 0);
     if (dot(N, L) > 0)
     {
