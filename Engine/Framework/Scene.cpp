@@ -43,7 +43,7 @@ namespace nu
 	}
 
 
-	void Scene::Draw(const class Renderer& renderer)
+	void Scene::Draw(const Renderer& renderer)
 	{
 		FrameUniform frameUniform{};
 
@@ -64,14 +64,15 @@ namespace nu
 		}
 
 		LightUniform lightUniform{};
+		lightUniform.ambient = glm::vec3{ 0.2f }; //ALL AMBIENT LIGHTS
 
-		auto lights = GetActorsByTag("Lights");
+		auto lights = GetActorsByTag("Light");
 		for (auto light : lights)
 		{
 			auto lightComponent = light->GetComponent<LightComponent>();
 			if (lightComponent)
 			{
-				//lightUniform.lights[lightUniform.count++] = lightComponent->GetLightData();
+				lightUniform.lights[lightUniform.count++] = lightComponent->GetLightData();
 			}
 		}
 

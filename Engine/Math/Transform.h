@@ -22,7 +22,7 @@ namespace nu
         void SetRotation(const glm::vec3& euler){ rotation = glm::quat(glm::radians(euler)); }
         void SetRotation(const glm::quat& qRotation){ rotation = glm::normalize(qRotation); }
 
-        const glm::mat4 GetMatrix() 
+        const glm::mat4 GetMatrix() const
         {
             auto mxt = glm::translate(position);
             //auto mxr = glm::toMat4(rotation);

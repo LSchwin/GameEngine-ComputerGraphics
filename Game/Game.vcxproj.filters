@@ -8,6 +8,9 @@
     <Filter Include="Assets\Scenes">
       <UniqueIdentifier>{4322a1b3-b118-42ce-b0c1-2daee27f4c7d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Materials">
+      <UniqueIdentifier>{064e9735-bc24-49b2-b506-3061e7cfe358}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
