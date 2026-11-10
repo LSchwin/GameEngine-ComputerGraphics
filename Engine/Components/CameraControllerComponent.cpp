@@ -28,13 +28,15 @@ namespace nu
         if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_E)) direction += m_owner->GetTransform().Up();
         if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_Q)) direction -= m_owner->GetTransform().Up();
         if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_W)) direction += m_owner->GetTransform().Forward();
-        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_S)) direction -= m_owner->GetTransform().Forward();;
+        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_S)) direction -= m_owner->GetTransform().Forward();
+
 
         if (glm::length2(direction) > 0.0f) {
             direction = glm::normalize(direction);
         }
         m_owner->SetPosition(m_owner->GetTransform().position + direction * (m_speed * dt));
 
+        //std::cout << m_owner->GetTransform().position.x << " " << m_owner->GetTransform().position.y << " " << m_owner->GetTransform().position.z << std::endl;
 	}
 
     void CameraControllerComponent::Read(const json::value_t& value)

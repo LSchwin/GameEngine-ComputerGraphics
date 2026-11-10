@@ -6,10 +6,13 @@
 #include "Math/Rect.h"
 #include "Texture.h"
 
+#include "MaterialInstance.h"
+
 #include "Input/Input.h"
 #include "Pipeline.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+
 
 namespace nu
 {
@@ -33,8 +36,8 @@ namespace nu
             return false;
         }
 
-        SDL_SetHint(SDL_HINT_GPU_DRIVER, "vulkan");
         SDL_GPUShaderFormat formats = SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL;
+        SDL_SetHint(SDL_HINT_GPU_DRIVER, "vulkan");
         m_gpuDevice = SDL_CreateGPUDevice(formats, true, NULL);
         if (!m_gpuDevice)
         {
@@ -128,12 +131,19 @@ namespace nu
 
     bool Renderer::EndFrame() const
     {
-        SDL_EndGPURenderPass(m_renderPass);
+        if (m_renderPass)
+        {
+            SDL_EndGPURenderPass(m_renderPass);
+            //m_renderPass = nullptr;
+        }
+
         if (!SDL_SubmitGPUCommandBuffer(m_commandBuffer))
         {
             std::cerr << "Could not submit command buffer: " << SDL_GetError() << std::endl;
             return false;
         }
+
+        //m_commandBuffer = nullptr;
 
         return true;
     }
@@ -161,7 +171,7 @@ namespace nu
     }
 
 
-    void Renderer::SetPipeline(const Pipeline& pipeline)
+    void Renderer::SetPipeline(const Pipeline& pipeline) const
     {
         // bind the pipeline to the current render pass with SDL_BindGPUGraphicsPipeline(renderPass, gpuPipeline)
         // the pipeline sets the shaders and render settings used by the draw calls that follow
@@ -266,6 +276,12 @@ namespace nu
         };
 
         SDL_BindGPUFragmentSamplers(m_renderPass, slot, &binding, 1);
+    }
+
+    void Renderer::SetMaterial(const MaterialInstance& materialInstance) const
+    {
+        SetPipeline(materialInstance.GetMaterial().GetPipeline());
+        materialInstance.Bind(m_commandBuffer, m_renderPass);
     }
 
     void Renderer::CreateDepthBuffer()
