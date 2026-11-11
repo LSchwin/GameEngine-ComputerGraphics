@@ -28,6 +28,7 @@
       "name": "Light1",
       "type": "Actor",
       "tag": "Light",
+      "active": true,
       "transform": {
         "rotation": [ -60, 30, 0 ]
       },
@@ -44,6 +45,7 @@
       "name": "Light2",
       "type": "Actor",
       "tag": "Light",
+      "active": true,
       "transform": {
         "position": [ 5, 5, 0 ]
       },

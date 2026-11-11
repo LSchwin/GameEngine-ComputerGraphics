@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include "Renderer.h"
 #include "Core/File.h"
+#include "Serialization/JSON.h"
 
 namespace nu
 {
@@ -13,7 +14,7 @@ namespace nu
 		if (m_gpuDevice && m_gpuShader) SDL_ReleaseGPUShader(m_gpuDevice, m_gpuShader);
 	}
 
-	bool Shader::Load(const std::string& filename, const Renderer& renderer, uint32_t uniformCount, uint32_t samplerCount)
+	bool Shader::Load(const std::string& filename, const class Renderer& renderer)
 	{
 		// store the renderer's gpu device in m_gpuDevice so the destructor can release the shader later
 		m_gpuDevice = renderer.GetGPUDevice();
@@ -77,16 +78,27 @@ namespace nu
 			return false;
 		}
 
-		// fill out the shader settings
-		// each field below needs a value, replace each {} using the comment beside it
+		// get samplers count 
+		json::document_t metadata;
+		if (!json::Load(filename + ".json", metadata))
+		{
+			std::cerr << "Could not load shader metadata: " << filename << ".json" << std::endl;
+			return false;
+		}
+
+		unsigned int samplers = 0;
+		JSON_READ(metadata, samplers);
+
+		// fill out the shader settings 
+		// each field below needs a value, replace each {} using the comment beside it 
 		SDL_GPUShaderCreateInfo shaderInfo{
-			.code_size = bytes.size(), // todo: the number of bytes in the shader code
-			.code = bytes.data(), // todo: pointer to the shader code (bytes.data())
-			.entrypoint = entrypoint, // todo: the entry function name
-			.format = format, // todo: the shader format found above
-			.stage = stage, // todo: the shader stage found above
-			.num_samplers = samplerCount,
-			.num_uniform_buffers = uniformCount
+		.code_size = bytes.size(), // todo: the number of bytes in the shader code 
+		.code = bytes.data(), // todo: pointer to the shader code (bytes.data()) 
+		.entrypoint = entrypoint, // todo: the entry function name 
+		.format = format, // todo: the shader format found above 
+		.stage = stage, // todo: the shader stage found above 
+		.num_samplers = samplers,
+		.num_uniform_buffers = 4
 		};
 
 		// create the shader with SDL_CreateGPUShader(device, &createInfo) and store it in m_gpuShader

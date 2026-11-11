@@ -10,7 +10,7 @@ namespace nu
 
 	struct MaterialData
 	{
-		glm::vec4 baseColor{ 1.0f };
+		glm::vec4 color{ 1.0f };
 		glm::vec2 tiling{ 1.0f };
 		glm::vec2 offset{ 0.0f };
 		float shininess = 32.0f;

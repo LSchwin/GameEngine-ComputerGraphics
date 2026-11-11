@@ -27,7 +27,7 @@ namespace nu
 			return false;
 		}
 
-		JSON_READ_NAME(document, "base_color", m_defaults.baseColor);
+		JSON_READ_NAME(document, "base_color", m_defaults.color);
 		JSON_READ_NAME(document, "tiling", m_defaults.tiling);
 		JSON_READ_NAME(document, "offset", m_defaults.offset);
 		JSON_READ_NAME(document, "shininess", m_defaults.shininess);

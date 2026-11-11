@@ -36,6 +36,7 @@ namespace nu
         }
         m_owner->SetPosition(m_owner->GetTransform().position + direction * (m_speed * dt));
 
+        // To see if the camera is positioned correctly
         //std::cout << m_owner->GetTransform().position.x << " " << m_owner->GetTransform().position.y << " " << m_owner->GetTransform().position.z << std::endl;
 	}
 

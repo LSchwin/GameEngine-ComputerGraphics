@@ -11,6 +11,8 @@
 
 #include "Resources/ResourceManager.h"
 
+#include "Core/File.h"
+
 #define DEFAULT_MATERIAL "materials/phong.material.json"
 
 namespace nu
@@ -33,7 +35,8 @@ namespace nu
 
 		// todo: start processing the scene from the root node with ProcessNode(node, scene, renderer)
 		// the root node is scene->mRootNode
-		std::string directory = ""; //GetParentDirectory(filename) + "/";
+		// texture paths in the model are relative to the model file
+		std::string directory = GetParentDirectory(filename) + "/";
 		LoadMaterials(scene, directory, renderer);
 
 		ProcessNode(scene->mRootNode, scene, renderer);
@@ -172,7 +175,7 @@ namespace nu
 			if (source->Get(AI_MATKEY_BASE_COLOR, color) == AI_SUCCESS ||
 				source->Get(AI_MATKEY_COLOR_DIFFUSE, color) == AI_SUCCESS)
 			{
-				instance.GetData().baseColor = glm::vec4{ color.r, color.g, color.b, color.a };
+				instance.GetData().color = glm::vec4{ color.r, color.g, color.b, color.a };
 			}
 
 			// shininess varies a lot between exporters, ignore zero
@@ -208,7 +211,7 @@ namespace nu
 
 			const MaterialData& data = instance.GetData();
 			std::cout << "  [" << i << "] " << name.C_Str()
-				<< " | color: " << data.baseColor.r << ", " << data.baseColor.g << ", " << data.baseColor.b << ", " << data.baseColor.a
+				<< " | color: " << data.color.r << ", " << data.color.g << ", " << data.color.b << ", " << data.color.a
 				<< " | shininess: " << data.shininess
 				<< " | texture: " << (path.length > 0 ? path.C_Str() : "none")
 				<< std::endl;

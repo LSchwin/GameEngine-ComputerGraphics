@@ -14,6 +14,12 @@ namespace nu
 
 	void ModelComponent::Draw(const Renderer& renderer)
 	{
+		if (!m_model)
+		{
+			std::cerr << "Could not draw model: " << m_owner->GetName() << "\n";
+			return;
+		}
+
 		ObjectUniform objectUniform
 		{
 			.model = m_owner->GetTransform().GetMatrix(),
@@ -24,7 +30,8 @@ namespace nu
 		renderer.SetFragmentUniform(UniformSlot::Object, &objectUniform, sizeof(objectUniform));
 
 		m_model->Draw(renderer, m_materials);
-
+		
+		// To see if the model is positioned correctly
 		//std::cout << m_owner->GetTransform().position.x << " " << m_owner->GetTransform().position.y << " " << m_owner->GetTransform().position.z << std::endl;
 	}
 

@@ -49,7 +49,7 @@ namespace nu
 		Initialize(material);
 
 		// only values present in the file override the defaults
-		JSON_READ_NAME(document, "base_color", m_data.baseColor);
+		JSON_READ_NAME(document, "base_color", m_data.color);
 		JSON_READ_NAME(document, "tiling", m_data.tiling);
 		JSON_READ_NAME(document, "offset", m_data.offset);
 		JSON_READ_NAME(document, "shininess", m_data.shininess);

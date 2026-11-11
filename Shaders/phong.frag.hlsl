@@ -43,7 +43,7 @@ Output main(Input input)
 	
     float4 albedo = u_texture.Sample(u_sampler, input.texcoord) * material.color;
     float3 diffuse = lights.ambient;
-    float3 specular;
+    float3 specular = 0;
 	
     float3 V = normalize(frame.cameraPosition - input.worldPos);
     for (uint i = 0; i < lights.count; i++)
