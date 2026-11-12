@@ -44,6 +44,7 @@ int main()
         // UPDATE
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
+            Engine::Get().GetEditor().ProcessEvent(event);
             if (event.type == SDL_EVENT_QUIT) {
                 quit = true;
             }
@@ -59,10 +60,16 @@ int main()
         // SCENE
         scene.Update(dt);
 
+        // EDITOR
+        Engine::Get().GetEditor().BeginFrame();
+        Engine::Get().GetEditor().Update();
+
         //RENDER
         renderer.BeginFrame();
-
         scene.Draw(renderer);
+
+        Engine::Get().GetRenderer().EndRenderPass();
+        Engine::Get().GetEditor().Draw(renderer);
 
         renderer.EndFrame();
     }

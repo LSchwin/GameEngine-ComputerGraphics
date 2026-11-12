@@ -19,7 +19,7 @@
         },
         {
           "type": "CameraControllerComponent",
-          "speed": 3,
+          "speed": 5.0,
           "sensitivity": 0.4
         }
       ]
@@ -71,6 +71,50 @@
           "type": "ModelComponent",
           "model": "models/ogre.obj",
           "materials": [ "materials/ogre.instance.json" ]
+        }
+      ]
+    },
+    {
+      "name": "Plane",
+      "type": "Actor",
+      "tag": "Plane",
+      "transform": {
+        "position": [ 0, -1, 0 ],
+        "scale": [ 4, 1, 4 ]
+      },
+      "components": [
+        {
+          "type": "ModelComponent",
+          "model": "models/plane.obj",
+          "materials": [ "materials/plane.instance.json" ]
+        }
+      ]
+    },
+    {
+      "name": "Helmet",
+      "type": "Actor",
+      "tag": "Helmet",
+      "transform": {
+        "position": [ 1, 0, 0 ]
+      },
+      "components": [
+        {
+          "type": "ModelComponent",
+          "model": "models/flight-helmet/flight-helmet/FlightHelmet.gltf"
+        }
+      ]
+    },
+    {
+      "name": "Lumin",
+      "type": "Actor",
+      "tag": "Lumin",
+      "transform": {
+        "position": [ -1, 0, 0 ]
+      },
+      "components": [
+        {
+          "type": "ModelComponent",
+          "model": "models/dragon.obj"
         }
       ]
     }

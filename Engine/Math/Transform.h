@@ -25,7 +25,6 @@ namespace nu
         const glm::mat4 GetMatrix() const
         {
             auto mxt = glm::translate(position);
-            //auto mxr = glm::toMat4(rotation);
             auto mxr = glm::toMat4(rotation);
             auto mxs = glm::scale(scale);
 

@@ -16,6 +16,8 @@ namespace nu
 		m_audio.Initialize();
 		//m_particleSystem.Initialize(5000);
 		//m_physics.Initialize();
+		m_editor = std::make_unique<Editor>();
+		m_editor->Initialize(m_renderer);
 		
 		return true;
 	}
@@ -27,6 +29,7 @@ namespace nu
 		m_audio.Shutdown();
 		//m_particleSystem.Shutdown();
 		//m_physics.Shutdown();
+		m_editor->Shutdown();
 	}
 
 	void Engine::Update()

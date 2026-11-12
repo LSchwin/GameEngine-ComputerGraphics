@@ -20,7 +20,7 @@
 #include "Renderer/ParticleSystem.h"
 #include "Renderer/Texture.h"
 #include "Serialization/JSON.h"
-
+#include "Editor/Editor.h"
 
 // framework
 #include "Framework/Actor.h"
@@ -46,6 +46,7 @@ namespace nu
 		Input& GetInput() { return m_input; }
 		Renderer& GetRenderer() { return m_renderer; }
 		Time& GetTime() { return m_time; }
+		Editor& GetEditor() { return *m_editor; }
 
 		Engine(const Engine&) = delete;
 		Engine& operator = (const Engine&) = delete;
@@ -65,5 +66,7 @@ namespace nu
 		Audio m_audio;
 		Time m_time;
 		ParticleSystem m_particleSystem;
+
+		std::unique_ptr<Editor> m_editor;
 	};
 }

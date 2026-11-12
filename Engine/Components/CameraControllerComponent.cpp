@@ -25,16 +25,17 @@ namespace nu
         glm::vec3 direction{ 0 };
         if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_A)) direction -= m_owner->GetTransform().Right();
         if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_D)) direction += m_owner->GetTransform().Right();
-        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_E)) direction += m_owner->GetTransform().Up();
-        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_Q)) direction -= m_owner->GetTransform().Up();
+        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_SPACE)) direction += m_owner->GetTransform().Up();
+        if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_LCTRL)) direction -= m_owner->GetTransform().Up();
         if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_W)) direction += m_owner->GetTransform().Forward();
         if (Engine::Get().GetInput().GetKeyDown(SDL_SCANCODE_S)) direction -= m_owner->GetTransform().Forward();
-
 
         if (glm::length2(direction) > 0.0f) {
             direction = glm::normalize(direction);
         }
         m_owner->SetPosition(m_owner->GetTransform().position + direction * (m_speed * dt));
+
+        //std::cout << m_speed << std::endl;
 
         // To see if the camera is positioned correctly
         //std::cout << m_owner->GetTransform().position.x << " " << m_owner->GetTransform().position.y << " " << m_owner->GetTransform().position.z << std::endl;
@@ -44,6 +45,7 @@ namespace nu
     {
         Component::Read(value);
         JSON_READ_NAME(value, "speed", m_speed);
+        std::cout << m_speed << std::endl;
         JSON_READ_NAME(value, "sensitivity", m_sensitivity);
     }
 }
