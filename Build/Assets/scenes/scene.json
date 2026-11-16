@@ -63,8 +63,9 @@
       "name": "Ogre",
       "type": "Actor",
       "tag": "Ogre",
+      "active": true,
       "transform": {
-        "position": [ 0, 0, 0 ]
+        "position": [ 3, 0, 0 ]
       },
       "components": [
         {
@@ -78,6 +79,7 @@
       "name": "Plane",
       "type": "Actor",
       "tag": "Plane",
+      "active": true,
       "transform": {
         "position": [ 0, -1, 0 ],
         "scale": [ 4, 1, 4 ]
@@ -94,6 +96,7 @@
       "name": "Helmet",
       "type": "Actor",
       "tag": "Helmet",
+      "active": true,
       "transform": {
         "position": [ 1, 0, 0 ]
       },
@@ -105,16 +108,50 @@
       ]
     },
     {
-      "name": "Lumin",
+      "name": "Bar",
       "type": "Actor",
-      "tag": "Lumin",
+      "tag": "Bar",
+      "active": true,
       "transform": {
-        "position": [ -1, 0, 0 ]
+        "position": [ -5, 1, -5 ],
+        "scale": [ 1, 1.2, 1 ]
       },
       "components": [
         {
           "type": "ModelComponent",
-          "model": "models/dragon.obj"
+          "model": "models/bar.fbx",
+          "materials": [ "materials/bar.instance.json" ]
+        }
+      ]
+    },
+    {
+      "name": "rat",
+      "type": "Actor",
+      "tag": "rat",
+      "active": true,
+      "transform": {
+        "position": [ 0, 0.33, 0.2 ],
+        "scale": [ 4, 4, 4 ]
+      },
+      "components": [
+        {
+          "type": "ModelComponent",
+          "model": "models/street_rat_4k.gltf/street_rat_4k.gltf"
+        }
+      ]
+    },
+    {
+      "name": "rock",
+      "type": "Actor",
+      "tag": "rock",
+      "active": true,
+      "transform": {
+        "position": [ 0, 0, 0 ]
+      },
+      "components": [
+        {
+          "type": "ModelComponent",
+          "model": "models/namaqualand_boulder_03_4k.gltf/namaqualand_boulder_03_4k.gltf"
         }
       ]
     }

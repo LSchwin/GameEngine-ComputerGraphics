@@ -2,5 +2,5 @@
 	"type": "material_instance",
 	"material": "materials/phong.material.json",
 	"tiling": [ 10, 10 ],
-	"textures": { "base_map": "textures/rocks_diffuse.jpg" }
+	"textures": { "base_map": "textures/lava_diffuse.png" }
 }
