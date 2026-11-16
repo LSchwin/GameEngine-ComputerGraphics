@@ -63,7 +63,7 @@
       "name": "Ogre",
       "type": "Actor",
       "tag": "Ogre",
-      "active": true,
+      "active": false,
       "transform": {
         "position": [ 3, 0, 0 ]
       },
@@ -79,7 +79,7 @@
       "name": "Plane",
       "type": "Actor",
       "tag": "Plane",
-      "active": true,
+      "active": false,
       "transform": {
         "position": [ 0, -1, 0 ],
         "scale": [ 4, 1, 4 ]
@@ -96,7 +96,7 @@
       "name": "Helmet",
       "type": "Actor",
       "tag": "Helmet",
-      "active": true,
+      "active": false,
       "transform": {
         "position": [ 1, 0, 0 ]
       },
@@ -111,7 +111,7 @@
       "name": "Bar",
       "type": "Actor",
       "tag": "Bar",
-      "active": true,
+      "active": false,
       "transform": {
         "position": [ -5, 1, -5 ],
         "scale": [ 1, 1.2, 1 ]

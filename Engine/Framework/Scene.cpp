@@ -3,11 +3,15 @@
 #include "Actor.h"
 #include "Core/Factory.h"
 
+#include "Editor/Editor.h"
+
 #include "Components/CameraComponent.h"
 #include "Components/LightComponent.h"
 #include "Renderer/Renderer.h"
 
 #include "Renderer/Light.h"
+
+#include "Engine/Engine.h"
 
 namespace nu
 {
@@ -64,13 +68,15 @@ namespace nu
 		}
 
 		LightUniform lightUniform{};
-		lightUniform.ambient = glm::vec3{ 0.2f }; //ALL AMBIENT LIGHTS
+		lightUniform.ambient = m_ambientLight; //ALL AMBIENT LIGHTS
 
 		auto lights = GetActorsByTag("Light");
 		for (auto light : lights)
 		{
+			if (!light->IsActive()) continue;
+
 			auto lightComponent = light->GetComponent<LightComponent>();
-			if (lightComponent)
+			if (lightComponent && lightComponent->IsActive())
 			{
 				lightUniform.lights[lightUniform.count++] = lightComponent->GetLightData();
 			}
@@ -137,6 +143,15 @@ namespace nu
 			return false;
 		}
 		return true;
+	}
+
+	void Scene::UpdateGui()
+	{
+		glm::vec3 clearColor = Engine::Get().GetRenderer().GetClearColor();
+
+		ImGui::ColorEdit3("Clear Color", glm::value_ptr(clearColor));
+		Engine::Get().GetRenderer().SetClearColor(clearColor);
+		ImGui::ColorEdit3("Ambient Light", glm::value_ptr(m_ambientLight));
 	}
 
 }

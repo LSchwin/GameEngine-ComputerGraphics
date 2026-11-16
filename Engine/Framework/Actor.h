@@ -74,6 +74,8 @@ namespace nu
 
         virtual void Read(const json::value_t& value) override;
 
+        void UpdateGui() override;
+
         void AddComponent(std::unique_ptr<Component> component);
 
         template<std::derived_from<Component> T>
