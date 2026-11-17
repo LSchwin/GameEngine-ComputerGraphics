@@ -79,7 +79,7 @@
       "name": "Plane",
       "type": "Actor",
       "tag": "Plane",
-      "active": false,
+      "active": true,
       "transform": {
         "position": [ 0, -1, 0 ],
         "scale": [ 4, 1, 4 ]
@@ -88,7 +88,7 @@
         {
           "type": "ModelComponent",
           "model": "models/plane.obj",
-          "materials": [ "materials/plane.instance.json" ]
+          "materials": [ "materials/ground.instance.json" ]
         }
       ]
     },
