@@ -22,9 +22,12 @@ namespace nu
 		Assimp::Importer importer;
 		const aiScene* scene = importer.ReadFile(filename,
 			aiProcess_Triangulate |
+			aiProcess_JoinIdenticalVertices |
 			aiProcess_GenSmoothNormals |
 			aiProcess_FlipUVs |
-			aiProcess_CalcTangentSpace);
+			aiProcess_CalcTangentSpace |
+			aiProcess_RemoveRedundantMaterials |
+			aiProcess_OptimizeMeshes);
 
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
@@ -175,7 +178,7 @@ namespace nu
 			if (source->Get(AI_MATKEY_BASE_COLOR, color) == AI_SUCCESS ||
 				source->Get(AI_MATKEY_COLOR_DIFFUSE, color) == AI_SUCCESS)
 			{
-				instance.GetData().color = glm::vec4{ color.r, color.g, color.b, color.a };
+				instance.GetData().baseColor = glm::vec4{ color.r, color.g, color.b, color.a };
 			}
 
 			// shininess varies a lot between exporters, ignore zero
@@ -211,7 +214,7 @@ namespace nu
 
 			const MaterialData& data = instance.GetData();
 			std::cout << "  [" << i << "] " << name.C_Str()
-				<< " | color: " << data.color.r << ", " << data.color.g << ", " << data.color.b << ", " << data.color.a
+				<< " | color: " << data.baseColor.r << ", " << data.baseColor.g << ", " << data.baseColor.b << ", " << data.baseColor.a
 				<< " | shininess: " << data.shininess
 				<< " | texture: " << (path.length > 0 ? path.C_Str() : "none")
 				<< std::endl;

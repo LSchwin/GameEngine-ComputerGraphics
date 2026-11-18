@@ -8,11 +8,13 @@ static const uint MAX_LIGHTS = 8;
 
 struct Material
 {
-    float4 color;
+    float4 base_color;
+    float3 specularColor;
+    float  shininess;
+    float3 emissiveColor;
+    float  padding;
     float2 tiling;
     float2 offset;
-    float shininess;
-    float3 padding;
 };
 
 struct Light

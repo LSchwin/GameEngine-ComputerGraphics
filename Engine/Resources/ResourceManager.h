@@ -16,6 +16,8 @@ namespace nu
 			requires std::derived_from<T, Resource>
 		res_t<T> Get(const std::string& name, Args&& ... args);
 
+		const auto& GetAll() const { return m_resources; }
+
 		template<typename T, typename ... Args>
 			requires std::derived_from<T, Resource>
 		res_t<T> GetWithID(const std::string& id, const std::string& name, Args&& ... args);
@@ -73,7 +75,8 @@ namespace nu
 			std::cout << "Loaded Resource: " << name << std::endl;
 		}
 
-		// add resource to resource manager
+		// add resource to resource manage
+		resource->SetName(name);
 		m_resources[id] = resource;
 
 		return resource;
