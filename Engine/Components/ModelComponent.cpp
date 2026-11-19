@@ -63,4 +63,20 @@ namespace nu
 		}
 
 	}
+
+	void ModelComponent::UpdateGui()
+	{
+		ImGui::TextColored({ 0, 1, 0, 1}, "Model");
+		m_model.get()->UpdateGui();
+		for (auto& material : m_materials)
+		{
+			if (!material) continue;
+			ImGui::PushID(material.get());
+			ImGui::Text("%s", material.get()->GetName().c_str());
+			material->UpdateGui();
+			ImGui::PopID();
+		}
+
+		//ImGui::Text("Material [%d] - %s", i, materials[i].GetName().c_str());
+	}
 }

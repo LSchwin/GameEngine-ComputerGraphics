@@ -37,9 +37,9 @@ namespace nu
 
 	void CameraComponent::UpdateGui()
 	{
-		ImGui::DragFloat("FOV", &m_fov, 0.1);
-		ImGui::DragFloat("Near Plane", &m_nearPlane, 0.1);
-		ImGui::DragFloat("Far Plane", &m_farPlane, 0.1);
+		ImGui::DragFloat("FOV", &m_fov, 0.1f);
+		ImGui::DragFloat("Near Plane", &m_nearPlane, 0.1f);
+		ImGui::DragFloat("Far Plane", &m_farPlane, 0.1f);
 	}
 
 }

@@ -53,8 +53,6 @@ namespace nu
     {
         ImGui::SliderFloat("Speed", &m_speed, 1.0f, 10.0f);
         ImGui::SliderFloat("Sensitivity", &m_sensitivity, 0.0f, 5.0f);
-
-        
         //m_yaw
         //m_pitch
     }
