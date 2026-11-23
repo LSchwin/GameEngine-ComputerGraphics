@@ -88,6 +88,23 @@
         {
           "type": "ModelComponent",
           "model": "models/plane.obj",
+          "materials": [ "materials/ground.instance.json" ]
+        }
+      ]
+    },
+    {
+      "name": "lava",
+      "type": "Actor",
+      "tag": "lava",
+      "active": false,
+      "transform": {
+        "position": [ 0, -1, 0 ],
+        "scale": [ 4, 1, 4 ]
+      },
+      "components": [
+        {
+          "type": "ModelComponent",
+          "model": "models/plane.obj",
           "materials": [ "materials/lava.instance.json" ]
         }
       ]

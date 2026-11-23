@@ -37,5 +37,8 @@
     <None Include="..\Build\Assets\materials\lava.instance.json">
       <Filter>Assets\Materials</Filter>
     </None>
+    <None Include="..\Build\Assets\materials\phong-normal.material.json">
+      <Filter>Assets\Materials</Filter>
+    </None>
   </ItemGroup>
 </Project>
