@@ -1,24 +1,7 @@
 #include "Engine/Engine.h"
-
-#include "Renderer/Shader.h"
-#include "Renderer/Pipeline.h"
-#include "Renderer/VertexBuffer.h"
-#include "Renderer/IndexBuffer.h"
-
 #include "Framework/Scene.h"
 
 #include "Resources/ResourceManager.h"
-
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/euler_angles.hpp>
-#include <glm/gtx/transform.hpp>
-
-#include "Components/CameraComponent.h"
-
-#define CHECK_UNIFORM_BOUNDRY(T) static_assert((sizeof(T) % 16) == 0);
-
 
 using namespace nu;
 
@@ -33,8 +16,7 @@ int main()
     Engine::Get().Initialize();
 
     Scene scene;
-    scene.Load("scenes/scene.json");
-
+    scene.Load("scenes/scene-skybox.json"); //flight-helmet/flight-helmet/FlightHelmet.gltf
   
     auto& renderer = Engine::Get().GetRenderer();
 
@@ -74,7 +56,6 @@ int main()
         renderer.EndFrame();
     }
 
-    
     // SHUTDOWN
     Engine::Get().Shutdown();
 

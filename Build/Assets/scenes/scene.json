@@ -120,7 +120,8 @@
       "components": [
         {
           "type": "ModelComponent",
-          "model": "models/flight-helmet/flight-helmet/FlightHelmet.gltf"
+          "model": "models/cube.obj",
+          "materials": [ "materials/skybox.instance.json" ]
         }
       ]
     },

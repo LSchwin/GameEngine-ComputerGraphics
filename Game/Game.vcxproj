@@ -191,9 +191,14 @@
     <None Include="..\Build\Assets\materials\lava.instance.json" />
     <None Include="..\Build\Assets\materials\multi.material.json" />
     <None Include="..\Build\Assets\materials\ogre.instance.json" />
+    <None Include="..\Build\Assets\materials\phong-default.material.json" />
     <None Include="..\Build\Assets\materials\phong-normal.material.json" />
     <None Include="..\Build\Assets\materials\phong.material.json" />
+    <None Include="..\Build\Assets\materials\skybox.instance.json" />
+    <None Include="..\Build\Assets\materials\skybox.material.json" />
     <None Include="..\Build\Assets\materials\squirrel.instance.json" />
+    <None Include="..\Build\Assets\scenes\scene-helmet.json" />
+    <None Include="..\Build\Assets\scenes\scene-skybox.json" />
     <None Include="..\Build\Assets\scenes\scene.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
