@@ -6,7 +6,12 @@ SamplerState cubemap_sampler : register(s0, FRAGMENT_TEXTURE_SPACE);
 struct Input
 {
     float3 TexCoord : TEXCOORD0;
-    float4 Position : SV_Position;
+    //float4 Position : SV_Position;
+};
+
+struct Output
+{
+    float4 color : SV_Target0;
 };
 
 float4 main(Input input) : SV_Target0

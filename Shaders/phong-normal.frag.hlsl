@@ -54,11 +54,11 @@ Output main(Input input)
     float specularMask = specular_texture.Sample(specular_sampler, input.texcoord).r;
     float3 emissive = emissive_texture.Sample(emissive_sampler, input.texcoord).rgb * material.emissiveColor;
     
-    float4 albedo = base_texture.Sample(base_sampler, input.texcoord) * material.base_color;
+    float4 albedo = base_texture.Sample(base_sampler, input.texcoord) * material.base_color; // * material.base_color
     float3 diffuse = lights.ambient;
     float3 specular = 0;
 	
-    float3 normal = normal_texture.Sample(base_sampler, input.texcoord).rgb * 2.0f - 1.0f;
+    float3 normal = normal_texture.Sample(normal_sampler, input.texcoord).rgb * 2.0f - 1.0f;
     normal.xy *= material.normalStrength;
     
     float3 nNormal = normalize(input.normal);

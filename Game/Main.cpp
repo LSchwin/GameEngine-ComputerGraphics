@@ -16,7 +16,7 @@ int main()
     Engine::Get().Initialize();
 
     Scene scene;
-    scene.Load("scenes/scene-skybox.json"); //flight-helmet/flight-helmet/FlightHelmet.gltf
+    scene.Load("scenes/scene.json"); //flight-helmet/flight-helmet/FlightHelmet.gltf
   
     auto& renderer = Engine::Get().GetRenderer();
 
